@@ -1,0 +1,63 @@
+<div class="dashboard-container">
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+      <img src="assets/avatar.png" alt="Logo Yakar" class="logo" />
+      <nav>
+        <ul>
+          <li><a href="#">Dashboard</a></li>
+        </ul>
+      </nav>
+      <button class="logout-btn">Déconnexion</button>
+    </aside>
+  
+    <!-- Contenu principal -->
+    <main class="main-content">
+      <header class="header">
+        <div class="user-info">
+          <img src="assets/avatar.png" alt="User Avatar" class="avatar" />
+          <span>user name</span>
+        </div>
+      </header>
+  
+      <section class="stats">
+        <!-- Carte pour la température et l'humidité -->
+        <div class="card temperature">
+          <img src="assets/sun.png" alt="Sunny Icon" class="card-background" />
+          <div class="overlay">
+            <h2 class="temperature-value">25°C</h2>
+            <p class="humidity-value">25%</p>
+          </div>
+        </div>
+  
+        <!-- Cartes supplémentaires -->
+        <div class="card temperature-details">
+            <img src="assets/temperature.png" alt="Sunny Icon" class="card-background" />
+            <h2>temperature</h2>
+        </div>
+        <div class="card humidity-details">
+            <img src="assets/humidité.png" alt="Sunny Icon" class="card-background" />
+            <h2>humidité</h2>
+        </div>
+      </section>
+  
+      <section class="average-stats">
+        <h2>Moyenne quotidienne</h2>
+        <div class="chart-container">
+          <canvas id="donutChart"></canvas>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <span class="legend-color" style="background-color: #36A2EB"></span>
+              <span>Température</span>
+              <span>20°C</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color" style="background-color: #0000FF"></span>
+              <span>Humidité</span>
+              <span>25%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  

@@ -1,4 +1,5 @@
 {
+  
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
@@ -22,6 +23,7 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/assets",
+<<<<<<< HEAD
                       "src/favicon.ico"
             ],
             "styles": [
@@ -31,6 +33,19 @@
             ],
             "scripts": [    "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
           ],
+=======
+              "src/favicon.ico"
+            ],
+            "styles": [
+              
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+            ],
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"],
+>>>>>>> 467e170cae2820e31dcc07b825dbf8b32b6ed504
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -86,13 +101,20 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
              "src/assets",
+<<<<<<< HEAD
                       "src/favicon.ico"
+=======
+             "src/favicon.ico"
+>>>>>>> 467e170cae2820e31dcc07b825dbf8b32b6ed504
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
+              
             ],
-            "scripts": []
+            "scripts": [
+               "node_modules/chart.js/dist/chart.js"
+            ]
           }
         }
       }
@@ -101,4 +123,7 @@
   "cli": {
     "analytics": "f43cd52b-d4eb-44ce-be76-caed169a81ad"
   }
+
 }
+
+

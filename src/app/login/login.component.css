@@ -1,0 +1,89 @@
+/* Supprimer les marges/paddings globales */
+body,
+html,
+.container-fluid {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Section gauche */
+.left-section {
+  background-color: #03045f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Logo */
+.logo {
+  max-width: 1000px;
+}
+
+/* Champ de mot de passe avec icône */
+.position-relative {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.toggle-password:hover {
+  color: #000;
+}
+
+/* Carte de connexion */
+.card {
+  border-radius: 12px;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.card h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.text-danger {
+  font-size: 0.85rem;
+}
+
+.input-group {
+  position: relative;
+}
+
+
+
+
+.input-group .form-control {
+  padding-right: 50px; /* Laisse de l'espace pour l'icône */
+}
+
+.input-group-text {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.input-group-text .fas {
+  color: #6c757d; /* Couleur par défaut de l'icône */
+}
+
+.input-group-text .fas:hover {
+  color: #007bff; /* Couleur au survol */
+}
