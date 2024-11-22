@@ -1,0 +1,29 @@
+<div class="sidebar">
+    <div class="logo">
+      <img src="assets/yakar.png" alt="Yakar">
+    </div>
+  
+    <ul class="nav flex-column">
+      <!-- Lien vers Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/">
+          <fa-icon [icon]="faDashboard"></fa-icon> Dashboard
+        </a>
+      </li>
+  
+      <!-- Lien vers Gestion Utilisateurs -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/gestion-utilisateur">
+          <fa-icon [icon]="faUsers"></fa-icon> Gestion Utilisateurs
+        </a>
+      </li>
+  
+      <!-- Déconnexion -->
+      <li class="nav-item logout">
+        <a class="nav-link" routerLink="/logout">
+          <fa-icon [icon]="faSignOutAlt"></fa-icon> Déconnexion
+        </a>
+      </li>
+    </ul>
+  </div>
+  
