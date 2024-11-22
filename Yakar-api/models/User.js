@@ -10,7 +10,11 @@ const userSchema = new mongoose.Schema({
   photo: { type: String },
   dateCreation: { type: Date, default: Date.now },
   dateModification: { type: Date, default: Date.now },
+<<<<<<< HEAD
   telephone: { type: String, required: true },  
+=======
+  telephone: { type: String, required: true, unique: true },  
+>>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
   sexe: { type: String, enum: ['Homme', 'Femme'], required: true }  
 });
 

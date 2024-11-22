@@ -12,15 +12,27 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+<<<<<<< HEAD
+=======
+    "cors": "^2.8.5",
+>>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.1",
+<<<<<<< HEAD
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ws": "^8.18.0"
   },
   "devDependencies": {},
+=======
+    "serialport": "^12.0.0",
+    "socket.io": "^4.8.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+>>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
   "description": ""
 }
