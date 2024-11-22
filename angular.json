@@ -21,10 +21,8 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+             "src/assets",
+                      "src/favicon.ico"
             ],
             "styles": [
               "src/styles.css"
@@ -84,15 +82,18 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              
+               "src/assets",
+                      "src/favicon.ico"
+              
             ],
             "styles": [
               "src/styles.css"
+              
             ],
-            "scripts": []
+            "scripts": [
+               "node_modules/chart.js/dist/chart.js"
+            ]
           }
         }
       }
