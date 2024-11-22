@@ -1,0 +1,56 @@
+<div class="dashboard">
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="assets/YAKAR.png" alt="Logo" class="logo-image">
+        </div>
+      <nav>
+        <ul>
+          <li><a href="#"><i class="fas fa-home"></i> Tableau de Bord</a></li>
+          <li><a href="#"><i class="fas fa-user"></i> Gestion Utilisateurs</a></li>       
+        </ul>
+      </nav>
+      <button class="logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </aside>
+
+    <main class="content">
+      <header class="header">
+        <div class="admin-info">
+          <img src="https://via.placeholder.com/40" alt="Admin" class="admin-photo">
+          <span>Nom de l'admin</span>
+        </div>
+      </header>
+
+      <section class="dashboard-panels">
+        <div class="panel current-status" style="display: inline-block; margin-right: 10px;">
+          <div class="temperature">{{ temperature }}°C</div>
+          <div class="humidity">{{ humidity }}%</div>
+        </div>
+        <div class="panel current-status" style="display: inline-block; margin-right: 10px;">
+          <div class="temperature">{{ temperature }}°C</div>
+          <div class="humidity">{{ humidity }}%</div>
+        </div>
+        <div class="panel current-status" style="display: inline-block;">
+          <div class="temperature">{{ temperature }}°C</div>
+          <div class="humidity">{{ humidity }}%</div>
+        </div>
+        
+        <div class="panel control">
+          <p><strong>On/Off</strong></p>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="fanStatus" (change)="toggleFan()">
+            <span class="slider"></span>
+          </label>
+          <p><i class="fan-icon"><br><img src="assets/fan.png" alt="fan" class="fan-icon"></i></p>
+        </div>
+        <div class="panel doughnut-chart">
+          <h3>Moyenne quotidienne</h3>
+          <canvas id="doughnutChart"></canvas>
+        </div>
+
+        <div class="panel history-chart">
+          <h3>Historique <i class="fas fa-sign-out-alt"></i></h3>
+          <canvas id="historyChart"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
