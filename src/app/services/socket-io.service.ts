@@ -7,7 +7,7 @@ import { delay } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class SocketIoService {
-  private socket: Socket;
+  private socket: Socket ;
   private isSocketReady: boolean = false;
 
   constructor() {
@@ -26,7 +26,7 @@ export class SocketIoService {
         observer.next(true); // Indique que la connexion est prête
       });
 
-      this.socket.on('connect_error', (error) => {
+      this.socket.on('connect_error', (error: any) => {
         console.error('Erreur WebSocket :', error);
         observer.next(false); // Si une erreur survient, marquer comme échec
       });

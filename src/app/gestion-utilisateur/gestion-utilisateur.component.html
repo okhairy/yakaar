@@ -1,35 +1,22 @@
-<div class="layout">
-  <!-- Sidebar -->
-  <app-sidebar></app-sidebar>
+<app-sidebar></app-sidebar>
 
-<!-- Header -->
-<header class="header">
-  <div class="profile">
-    <img src="assets/admin-profile.jpg" alt="Admin Profile" />
-    <span>Admin name</span>
-  </div>
-
-  <div class="search-bar">
-    <mat-form-field appearance="outline">
-      <mat-label>Rechercher un utilisateur</mat-label>
-      <input matInput type="text" [(ngModel)]="searchTerm">
-      <button matSuffix mat-icon-button>
-        <mat-icon>search</mat-icon>
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="action-bar">
+      <div class="search-bar">
+        <mat-form-field appearance="outline">
+          <mat-label>Rechercher un utilisateur</mat-label>
+          <input matInput type="text" [(ngModel)]="searchTerm">
+          <button matSuffix mat-icon-button>
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <button mat-raised-button color="primary" class="add-button">
+        <mat-icon>add</mat-icon>
+        Ajouter
       </button>
-    </mat-form-field>
-  </div>
-</header>
-
-<!-- Main content -->
-<div class="main-content">
-  <div class="action-bar">
-    <button mat-raised-button color="primary" class="add-button">
-      <mat-icon>add</mat-icon>
-      Ajouter
-    </button>
-  </div>
-
-
+    </div>
 
     <table mat-table [dataSource]="paginatedUsers" class="users-table">
       <ng-container matColumnDef="nom">
@@ -61,16 +48,16 @@
         <td mat-cell *matCellDef="let user">
           <div class="action-buttons">
             <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
-              <mat-icon mat-tooltip = "Supprimer" >delete</mat-icon>
-          
+              <mat-icon Mat-tooltip = "Supprimer">delete</mat-icon>
+             
             </button>
             <button mat-icon-button color="primary" [routerLink]="['edit', user.id]">
-              <mat-icon  mat-tooltip = "Modifier"  >edit</mat-icon>
-            
+              <mat-icon mat-toolip = "Modifier">edit</mat-icon>
+             
             </button>
             <button mat-icon-button color="accent" (click)="toggleUserRole(user)">
-              <mat-icon mat-tooltip = Modifier>swap_horiz</mat-icon>
-            
+              <mat-icon mat-tooltip = "Changer le rôle">swap_horiz</mat-icon>
+             
             </button>
           </div>
         </td>
@@ -80,12 +67,9 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    
-<!-- Pagination-->
     <mat-paginator [length]="filteredUsers.length"
                   [pageSize]="itemsPerPage"
                   [pageSizeOptions]="[5, 10, 20]"
                   (page)="currentPage = $event.pageIndex + 1">
     </mat-paginator>
   </div>
-</div>

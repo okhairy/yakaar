@@ -1,51 +1,62 @@
-/* Importation des styles de Material et Bootstrap */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-/* Conteneur principal du dashboard */
-.layout {
+.dashboard-container {
   display: flex;
   min-height: 100vh;
-  flex-direction: column; /* Empile les éléments verticalement */
 }
 
-/* Header contenant le profil et la recherche */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #f4f4f4;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.sidebar {
+  width: 250px;
+  background-color: #1a237e;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  height: 100vh;
 }
 
-/* Profil dans le header */
-.profile {
-  display: flex;
-  align-items: center;
+.logo {
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.profile img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
+.logo img {
+  max-width: 150px;
 }
 
-/* Barre de recherche dans le header */
-.search-bar {
-  width: 300px;
+.menu-item {
+  display: block;
+  padding: 12px 15px;
+  margin: 5px 0;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-/* Contenu principal */
+.menu-item.active,
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.deconnexion {
+  position: absolute;
+  bottom: 20px;
+  width: calc(100% - 40px);
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+}
 .main-content {
-  margin-top: 20px;  /* Espacement sous le header */
-  margin-left: 250px;  /* Laisse de l'espace à gauche pour un menu latéral */
+  margin-left: 250px;
   padding: 20px;
   width: calc(100% - 250px);
 }
 
-/* Barre d'action contenant la recherche et le bouton "Ajouter" */
 .action-bar {
   display: flex;
   justify-content: space-between;
@@ -53,18 +64,15 @@
   margin-bottom: 20px;
 }
 
-/* Style pour la barre de recherche */
-.search-bar mat-form-field {
+.search-bar {
   width: 300px;
 }
 
-/* Bouton Ajouter */
 .add-button {
   background-color: #42a5f5;
   color: white;
 }
 
-/* Table des utilisateurs */
 .users-table {
   width: 100%;
   border-collapse: collapse;
@@ -72,7 +80,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Badge de statut des utilisateurs */
 .status-badge {
   padding: 5px 10px;
   border-radius: 15px;
@@ -89,7 +96,6 @@
   color: #616161;
 }
 
-/* Boutons d'action dans la table */
 .action-buttons {
   display: flex;
   gap: 10px;
