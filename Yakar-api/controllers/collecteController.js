@@ -134,25 +134,36 @@ exports.getWeeklyHistory = async (req, res) => {
   try {
     const { startDate } = req.query;
 
-    // Convertir la date de début et calculer la date de fin pour avoir une semaine complète
+    // Convertir la date de début en objet Date
     const start = new Date(startDate);
-    const endDate = new Date(start.getTime() + 6 * 24 * 60 * 60 * 1000); // 6 jours plus tard
 
-    // Filtrer les collectes entre la date de début et de fin
+    // Trouver le lundi de la semaine de la date fournie
+    const dayOfWeek = start.getUTCDay(); // 0 = dimanche, 1 = lundi, ..., 6 = samedi
+    const diffToMonday = (dayOfWeek + 6) % 7; // Calculer le nombre de jours à soustraire pour obtenir le lundi
+    const mondayDate = new Date(start.getTime() - diffToMonday * 24 * 60 * 60 * 1000);
+
+    // Calculer la date de fin (dimanche de la même semaine)
+    const sundayDate = new Date(mondayDate.getTime() + 6 * 24 * 60 * 60 * 1000);
+
+    // Filtrer les collectes entre le lundi et le dimanche
     const collectes = await Collecte.find({
-      date: { $gte: start, $lte: endDate }
+      date: { $gte: mondayDate, $lte: sundayDate }
     }).sort({ date: 1 });
 
     const requiredTimes = ["10:00", "14:00", "17:00"];
     const historique = {};
 
     // Initialiser chaque jour de la semaine avec des valeurs par défaut (null pour les moyennes)
+    const jours = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+    
     for (let i = 0; i < 7; i++) {
-      const currentDate = new Date(start.getTime() + i * 24 * 60 * 60 * 1000);
+      const currentDate = new Date(mondayDate.getTime() + i * 24 * 60 * 60 * 1000);
       const day = currentDate.toISOString().split('T')[0];
+      const jourNom = jours[i]; // Obtenir le nom du jour
 
       historique[day] = {
         date: day,
+        jour: jourNom, // Ajouter le nom du jour
         moyenneTemp: null,
         moyenneHum: null,
         collectes: []

@@ -8,11 +8,35 @@ const collecteController = require('../controllers/collecteController');
  *   post:
  *     summary: Créer une nouvelle collecte
  *     tags: [Collecte]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Date et heure de la collecte
+ *                 example: "2023-10-01T10:00:00Z"
+ *               temperature:
+ *                 type: number
+ *                 description: Température enregistrée lors de la collecte
+ *                 example: 22.5
+ *               humidite:
+ *                 type: number
+ *                 description: Humidité enregistrée lors de la collecte
+ *                 example: 60
+ *               commentaire:
+ *                 type: string
+ *                 description: Commentaire facultatif sur la collecte
+ *                 example: "Collecte du matin"
  *     responses:
  *       201:
  *         description: Collecte créée avec succès
  *       400:
- *         description: Requête invalide
+ *         description: Requête invalide, par exemple si des données sont manquantes
  */
 router.post('/creer', collecteController.creerCollecte);
 
@@ -29,12 +53,14 @@ router.post('/creer', collecteController.creerCollecte);
  *         required: false
  *         schema:
  *           type: integer
+ *           example: 1
  *       - in: query
  *         name: limit
  *         description: Nombre d'éléments par page
  *         required: false
  *         schema:
  *           type: integer
+ *           example: 10
  *       - in: query
  *         name: startDate
  *         description: Date de début pour filtrer les collectes
@@ -42,6 +68,7 @@ router.post('/creer', collecteController.creerCollecte);
  *         schema:
  *           type: string
  *           format: date
+ *           example: "2023-10-01"
  *       - in: query
  *         name: endDate
  *         description: Date de fin pour filtrer les collectes
@@ -49,9 +76,32 @@ router.post('/creer', collecteController.creerCollecte);
  *         schema:
  *           type: string
  *           format: date
+ *           example: "2023-10-31"
  *     responses:
  *       200:
  *         description: Liste des collectes récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: ID de la collecte
+ *                   date:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date et heure de la collecte
+ *                   temperature:
+ *                     type: number
+ *                     description: Température enregistrée
+ *                   humidite:
+ *                     type: number
+ *                     description: Humidité enregistrée
+ *       400:
+ *         description: Requête invalide
  */
 router.get('/get-all', collecteController.getAllCollectes);
 
@@ -75,6 +125,24 @@ router.get('/get-all', collecteController.getAllCollectes);
  *     responses:
  *       200:
  *         description: Collecte trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: ID de la collecte
+ *                 date:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Date et heure de la collecte
+ *                 temperature:
+ *                   type: number
+ *                   description: Température enregistrée
+ *                 humidite:
+ *                   type: number
+ *                   description: Humidité enregistrée
  *       404:
  *         description: Collecte non trouvée
  */
@@ -94,6 +162,7 @@ router.get('/get/:id', collecteController.getCollecteById);
  *         schema:
  *           type: string
  *           format: date
+ *           example: "2023-10-01"
  *       - in: query
  *         name: endDate
  *         description: Date de fin pour filtrer les collectes
@@ -101,14 +170,34 @@ router.get('/get/:id', collecteController.getCollecteById);
  *         schema:
  *           type: string
  *           format: date
+ *           example: "2023-10-31"
  *     responses:
  *       200:
  *         description: Liste des collectes récupérée par période
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: ID de la collecte
+ *                   date:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date et heure de la collecte
+ *                   temperature:
+ *                     type: number
+ *                     description: Température enregistrée
+ *                   humidite:
+ *                     type: number
+ *                     description: Humidité enregistrée
  *       400:
  *         description: Requête invalide
  */
 router.get('/periode', collecteController.getCollectesByDate);
-
 // Exemple: http://localhost:5000/api/collecte/periode?startDate=2023-11-01&endDate=2023-11-30
 
 
@@ -126,9 +215,25 @@ router.get('/periode', collecteController.getCollectesByDate);
  *         schema:
  *           type: string
  *           format: date
+ *           example: "2023-10-01"
  *     responses:
  *       200:
  *         description: Moyenne quotidienne trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 date:
+ *                   type: string
+ *                   format: date
+ *                   description: Date de la moyenne
+ *                 moyenneTemperature:
+ *                   type: number
+ *                   description: Moyenne des températures pour la date
+ *                 moyenneHumidite:
+ *                   type: number
+ *                   description: Moyenne des humidités pour la date
  *       404:
  *         description: Aucune collecte trouvée pour cette date
  */
@@ -151,15 +256,32 @@ router.get('/moyenne-journaliere', collecteController.getDailyAverage);
  *         schema:
  *           type: string
  *           format: date
+ *           example: "2023-10-01"
  *     responses:
  *       200:
  *         description: Historique hebdomadaire trouvé
+ *         content:
+ *           application/json:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 date:
+ *                   type: string
+ *                   format: date
+ *                   description: Date de la collecte
+ *                 moyenneTemperature:
+ *                   type: number
+ *                   description: Moyenne des températures pour la journée
+ *                 moyenneHumidite:
+ *                   type: number
+ *                   description: Moyenne des humidités pour la journée
  *       400:
  *         description: Requête invalide
  */
 router.get('/historique-hebdomadaire', collecteController.getWeeklyHistory);
 
-// Exemple: http://localhost:5000/api/collecte/historique-hebdomadaire?startDate=2023-11-10
+// Exemple: http://localhost:5000/api/collecte/historique-hebdomadaire?startDate=2023-11-10   (14)
 
 
 module.exports = router;

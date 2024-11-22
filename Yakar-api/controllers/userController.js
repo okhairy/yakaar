@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const Collecte = require('../models/Collecte');
 const jwt = require('jsonwebtoken');
+const BlacklistToken = require('../models/blacklistToken');
+
 
 // Fonction de validation des champs de l'utilisateur
 const validateUserInput = (nom, prenom, email, motDePasse, codeSecret, telephone, sexe) => {
@@ -79,9 +81,14 @@ exports.authentifier = async (req, res) => {
     // Rechercher l'utilisateur par email
     const user = await User.findOne({ email });
 
-    // Vérifier si l'utilisateur existe et si le mot de passe est correct
-    if (!user || user.motDePasse !== motDePasse) {
-      return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
+    if (!user) {
+      // L'email n'existe pas dans la base de données
+      return res.status(401).json({ error: 'Email non trouvé. Veuillez vérifier votre email.' });
+    }
+
+    if (user.motDePasse !== motDePasse) {
+      // L'email est correct mais le mot de passe est incorrect
+      return res.status(401).json({ error: 'Mot de passe incorrect. Veuillez réessayer.' });
     }
 
     // Créer le token JWT
@@ -141,16 +148,14 @@ exports.authentifierParCodeSecret = async (req, res) => {
   }
 };
 
-
-
-
+// methode pour mettre à jour un utilisateur
 exports.updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
     const { nom, prenom, email, motDePasse, codeSecret, role, photo, telephone, sexe } = req.body;
 
     // Validation des champs de saisie
-    const validationErrors = validateUserInput(nom, prenom, email, motDePasse, codeSecret);
+    const validationErrors = validateUserInput(nom, prenom, email, motDePasse, codeSecret, telephone, sexe);
     if (validationErrors.length > 0) {
       return res.status(400).json({ errors: validationErrors });
     }
@@ -190,6 +195,29 @@ exports.supprimerUser = async (req, res) => {
     res.status(200).json({ message: 'Utilisateur supprimé avec succès' });
   } catch (error) {
     res.status(500).json({ error: 'Erreur lors de la suppression de l\'utilisateur' });
+  }
+};
+
+// Suppression de plusieurs utilisateurs
+exports.deleteMultipleUsers = async (req, res) => {
+  try {
+    const { userIds } = req.body; // Tableau des IDs des utilisateurs à supprimer
+
+    // Vérification que `userIds` est fourni et non vide
+    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+      return res.status(400).json({ error: "Un tableau d'IDs valide est requis." });
+    }
+
+    // Suppression des utilisateurs dont les IDs sont dans `userIds`
+    const result = await User.deleteMany({ _id: { $in: userIds } });
+
+    // Réponse avec les détails des suppressions
+    res.status(200).json({
+      message: `${result.deletedCount} utilisateur(s) supprimé(s) avec succès.`,
+    });
+  } catch (error) {
+    console.error('Erreur lors de la suppression de plusieurs utilisateurs :', error);
+    res.status(500).json({ error: "Une erreur s'est produite lors de la suppression." });
   }
 };
 
@@ -240,3 +268,43 @@ exports.activerDesactiverVentilateur = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors du changement d\'état du ventilateur' });
   }
 };
+
+
+ // Fonction pour gérer la déconnexion  
+ exports.deconnexion = async (req, res) => {
+  const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1]; // Récupérer le token
+
+  if (token) {
+    // Ajouter le token à la liste noire dans la base de données
+    await BlacklistToken.create({ token });
+    console.log(`Token ajouté à la liste noire : ${token}`);
+  }
+
+  res.status(200).json({ message: 'Déconnexion réussie' });
+};
+
+exports.changerRole = async (req, res) => {
+  try {
+    const { userId } = req.params; // Récupérer l'ID de l'utilisateur à modifier
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+
+    // Vérifier le rôle actuel et le changer
+    user.role = user.role === 'admin' ? 'simple' : 'admin';
+    await user.save(); // Enregistrer les modifications
+
+    res.status(200).json({
+      message: 'Rôle de l\'utilisateur mis à jour avec succès',
+      user: { id: user._id, nom: user.nom, prenom: user.prenom, role: user.role }
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la mise à jour du rôle de l\'utilisateur' });
+  }
+};
+
+
+
+
