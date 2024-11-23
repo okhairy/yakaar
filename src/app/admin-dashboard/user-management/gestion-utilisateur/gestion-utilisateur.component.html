@@ -1,0 +1,139 @@
+<div class="container mx-auto p-4">
+  <!-- En-tête avec recherche, photo de profil de l'admin et actions -->
+  <div class="search-header">
+    <h1 class="text-2xl font-bold">Gestion des Utilisateurs</h1>
+    <div class="search-bar">
+      <!-- Barre de recherche -->
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch($event)"
+        placeholder="Rechercher un utilisateur..."
+        class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+      />
+      
+      <!-- Photo de profil de l'admin
+      <div *ngIf="users?.photo; else profilePlaceholder" class="profile-picture">
+        <img [src]="users.photo" alt="Photo de Profil" class="w-full h-full rounded-full object-cover" />
+      </div>
+      <ng-template #profilePlaceholder>
+        <div class="profile-placeholder">
+          {{ users?.nom?.charAt(0) }}
+        </div>
+      </ng-template>  -->
+      
+      <!-- Bouton Ajouter un utilisateur -->
+      <button
+        (click)="openUserForm()"
+        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+      >
+        Ajouter un utilisateur
+      </button>
+    </div>
+  </div>
+
+  <!-- Tableau des utilisateurs -->
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Photo
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Nom
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Email
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Statut
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Rôle
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let user of users">
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex items-center">
+              <!-- Photo de profil de l'utilisateur -->
+              <div *ngIf="user.photo; else userPhotoPlaceholder" class="w-10 h-10 rounded-full overflow-hidden">
+                <img [src]="user.photo" alt="Photo de Profil" class="w-full h-full object-cover" />
+              </div>
+              <ng-template #userPhotoPlaceholder>
+                <div class="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center text-white font-bold">
+                  {{ user.nom.charAt(0) }}
+                </div>
+              </ng-template>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-medium text-gray-900">
+              {{user.nom}} {{user.prenom}}
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">{{user.email}}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span
+              [class]="user.actif ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+            >
+              {{user.actif ? 'Actif' : 'Inactif'}}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {{user.statut}}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <button
+              (click)="openUserForm(user)"
+              class="text-indigo-600 hover:text-indigo-900 mr-4"
+            >
+              Modifier
+            </button>
+            <button
+              (click)="confirmDelete(user)"
+              class="text-red-600 hover:text-red-900 mr-4"
+            >
+              Supprimer
+            </button>
+            <button
+              (click)="toggleUserStatus(user)"
+              class="text-yellow-600 hover:text-yellow-900"
+            >
+              {{user.actif ? 'Désactiver' : 'Activer'}}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+ <!-- Pagination -->
+<div class="pagination">
+  <div class="page-info">
+    Affichage de {{ currentPageInfo }}
+  </div>
+
+
+    
+    <div class="page-buttons">
+      <button
+        *ngFor="let page of pages"
+        (click)="goToPage(page)"
+        [class.bg-blue-500]="page === currentPage"
+        [class.text-white]="page === currentPage"
+        class="px-3 py-1 rounded border hover:bg-gray-100"
+      >
+        {{page}}
+      </button>
+    </div>
+  </div>
+</div>

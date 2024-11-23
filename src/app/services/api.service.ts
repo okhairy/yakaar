@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -8,7 +8,7 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:5000/api'; // Remplacez par l'URL de votre API
+  private baseUrl = 'http://localhost:5000/api';
 
   constructor(private http: HttpClient) {}
 
@@ -62,6 +62,42 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  // Récupérer les utilisateurs avec pagination
+  getUsers(page: number = 1, limit: number = 8): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+    
+    return this.http.get(`${this.baseUrl}/user/get-all`, { 
+      params,
+      headers: this.getAuthHeaders() 
+    }).pipe(catchError(this.handleError));
+  }
+
+  // Changer le rôle d'un utilisateur
+  toggleUserRole(userId: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/user/toggle-role/${userId}`, {}, {
+      headers: this.getAuthHeaders()
+    }).pipe(catchError(this.handleError));
+  }
+
+  // Mettre à jour le statut d'un utilisateur (actif/inactif)
+  updateUserStatus(userId: string, status: boolean): Observable<any> {
+    return this.http.put(`${this.baseUrl}/user/update-status/${userId}`, 
+      { status }, 
+      { headers: this.getAuthHeaders() }
+    ).pipe(catchError(this.handleError));
+  }
+
+  // Rechercher des utilisateurs
+  searchUsers(query: string): Observable<any> {
+    const params = new HttpParams().set('q', query);
+    return this.http.get(`${this.baseUrl}/user/search`, {
+      params,
+      headers: this.getAuthHeaders()
+    }).pipe(catchError(this.handleError));
+  }
+
   // -------- COLLECTES --------
 
   // Récupérer toutes les collectes avec pagination et filtres (dates)
@@ -70,20 +106,24 @@ export class ApiService {
     if (startDate) params.startDate = startDate;
     if (endDate) params.endDate = endDate;
 
-    return this.http.get(`${this.baseUrl}/collecte/get-all`, { params, headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
+    return this.http.get(`${this.baseUrl}/collecte/get-all`, { 
+      params, 
+      headers: this.getAuthHeaders() 
+    }).pipe(catchError(this.handleError));
   }
 
   // Créer une nouvelle collecte
   createCollecte(collecte: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/collecte/creer`, collecte, { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
+    return this.http.post(`${this.baseUrl}/collecte/creer`, collecte, { 
+      headers: this.getAuthHeaders() 
+    }).pipe(catchError(this.handleError));
   }
 
   // Récupérer une collecte spécifique par ID
   getCollecteById(collecteId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/collecte/get/${collecteId}`, { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
+    return this.http.get(`${this.baseUrl}/collecte/get/${collecteId}`, { 
+      headers: this.getAuthHeaders() 
+    }).pipe(catchError(this.handleError));
   }
 
   // Récupérer la moyenne journalière (température et humidité)
@@ -104,16 +144,13 @@ export class ApiService {
 
   // Gestion des erreurs API
   private handleError(error: any): Observable<never> {
-    // Afficher l'erreur dans la console pour le débogage
     console.error('Une erreur est survenue :', error);
 
-    // Vous pouvez personnaliser le message d'erreur ici selon le type d'erreur
     let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
     if (error.error && error.error.message) {
       errorMessage = error.error.message;
     }
 
-    // Retourner une erreur observable avec un message personnalisé
-    return throwError(errorMessage);
+    return throwError(() => errorMessage);
   }
 }

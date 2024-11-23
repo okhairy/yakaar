@@ -1,0 +1,10 @@
+<!-- components/confirmation-dialog/confirmation-dialog.component.html -->
+ 
+<div class="confirm-dialog">
+  <h3>{{ data.title }}</h3>
+  <p>{{ data.message }}</p>
+  <div class="button-group">
+    <button (click)="dialogRef.close(false)">Annuler</button>
+    <button (click)="dialogRef.close(true)" [class]="data.type">Confirmer</button>
+  </div>
+</div>
