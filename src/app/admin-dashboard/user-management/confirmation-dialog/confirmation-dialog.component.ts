@@ -5,11 +5,10 @@ import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { DialogData } from '../user.types';
 
 @Component({
-  selector: 'app-confirmation-dialog',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './confirmation-dialog.component.html',
-  styleUrls: ['./confirmation-dialog.component.scss']
+    selector: 'app-confirmation-dialog',
+    imports: [CommonModule],
+    templateUrl: './confirmation-dialog.component.html',
+    styleUrls: ['./confirmation-dialog.component.scss']
 })
 export class ConfirmationDialogComponent {
   constructor(

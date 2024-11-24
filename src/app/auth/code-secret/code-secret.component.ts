@@ -6,11 +6,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-code-secret',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './code-secret.component.html',
-  styleUrls: ['./code-secret.component.css'],
+    selector: 'app-code-secret',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './code-secret.component.html',
+    styleUrls: ['./code-secret.component.css']
 })
 export class CodeSecretComponent implements OnInit {
   public codeSecret: string = ''; // Code actuellement saisi

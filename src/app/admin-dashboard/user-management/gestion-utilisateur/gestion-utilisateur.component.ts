@@ -13,17 +13,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';import { SidebarComponent } from '../../../sidebar/sidebar.component';
 
 @Component({
-  selector: 'app-gestion-utilisateur',
-  standalone: true,
-  imports: [
-    CommonModule, 
-    HttpClientModule,
-    FormsModule,
-    BrowserAnimationsModule,  // Importer BrowserAnimationsModule
-    ToastrModule.forRoot()  // Ajouter le ToastrModule avec la configuration par défaut
-  ],
-  templateUrl: './gestion-utilisateur.component.html',
-  styleUrls: ['./gestion-utilisateur.component.css']
+    selector: 'app-gestion-utilisateur',
+    imports: [
+        CommonModule,
+        HttpClientModule,
+        FormsModule,
+        BrowserAnimationsModule, // Importer BrowserAnimationsModule
+        ToastrModule// Ajouter le ToastrModule avec la configuration par défaut
+    ],
+    templateUrl: './gestion-utilisateur.component.html',
+    styleUrls: ['./gestion-utilisateur.component.css']
 })
 export class GestionUtilisateurComponent implements OnInit {
   users: User[] = [];

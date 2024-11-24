@@ -4,11 +4,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 
 @Component({
-  selector: 'app-user-dashboard',
-  standalone: true,
-  imports: [],
-  templateUrl: './user-dashboard.component.html',
-  styleUrls: ['./user-dashboard.component.css']
+    selector: 'app-user-dashboard',
+    imports: [],
+    templateUrl: './user-dashboard.component.html',
+    styleUrls: ['./user-dashboard.component.css']
 })
 export class UserDashboardComponent implements OnInit {
   constructor(

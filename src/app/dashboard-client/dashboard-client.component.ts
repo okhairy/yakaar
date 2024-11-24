@@ -4,11 +4,10 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 @Component({
-  selector: 'app-dashboard-client',
-  standalone: true,
-  imports: [],
-  templateUrl: './dashboard-client.component.html',
-  styleUrl: './dashboard-client.component.css'
+    selector: 'app-dashboard-client',
+    imports: [],
+    templateUrl: './dashboard-client.component.html',
+    styleUrl: './dashboard-client.component.css'
 })
 export class DashboardClientComponent implements OnInit {
   ngOnInit() {
