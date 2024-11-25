@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const BlacklistToken = require('../models/blacklistToken');
 
 
+
 // Fonction de validation des champs de l'utilisateur
 const validateUserInput = (nom, prenom, email, motDePasse, codeSecret, telephone, sexe) => {
   const errors = [];
@@ -82,13 +83,21 @@ exports.authentifier = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      // L'email n'existe pas dans la base de données
-      return res.status(401).json({ error: 'Email non trouvé. Veuillez vérifier votre email.' });
+      console.log('Erreur : email non trouvé');
+      return res.status(401).json({
+        errorType: 'email',
+        error: 'Email non trouvé. Veuillez vérifier votre email.'
+      });
     }
 
-    if (user.motDePasse !== motDePasse) {
-      // L'email est correct mais le mot de passe est incorrect
-      return res.status(401).json({ error: 'Mot de passe incorrect. Veuillez réessayer.' });
+    // Comparaison du mot de passe avec bcrypt (si vous utilisez bcrypt pour le hachage)
+    const motDePasseValide = await bcrypt.compare(motDePasse, user.motDePasse);
+    if (!motDePasseValide) {
+      console.log('Erreur : mot de passe incorrect');
+      return res.status(401).json({
+        errorType: 'password',
+        error: 'Mot de passe incorrect. Veuillez réessayer.'
+      });
     }
 
     // Créer le token JWT
@@ -100,7 +109,7 @@ exports.authentifier = async (req, res) => {
 
     res.status(200).json({
       message: 'Authentification réussie',
-      token, // Renvoie le token au client
+      token,
       user: {
         nom: user.nom,
         prenom: user.prenom,
@@ -109,6 +118,7 @@ exports.authentifier = async (req, res) => {
       }
     });
   } catch (error) {
+    console.log('Erreur interne :', error);
     res.status(500).json({ error: 'Erreur lors de l\'authentification de l\'utilisateur' });
   }
 };

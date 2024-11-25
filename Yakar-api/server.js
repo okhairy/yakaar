@@ -54,10 +54,11 @@ const io = socketIo(server, {
   },
 });
 
-let code = '';
-let lastKeyTime = Date.now();
-const timeout = 3000;
+let code = ''; // Stocke le code en cours de saisie
+let lastKeyTime = Date.now(); // Temps de la dernière touche appuyée
+const timeout = 3000; // Timeout de 3 secondes pour détecter un code complet
 
+// Configuration du port série
 const serialPort = new SerialPort({
   path: '/dev/ttyUSB0',
   baudRate: 9600,
@@ -73,31 +74,43 @@ serialPort.on('error', (err) => {
   console.error('Erreur sur le port série :', err.message);
 });
 
+// Lecture des données du port série
 parser.on('data', (data) => {
-  console.log('Données reçues du port série :', data.trim());
   const key = data.trim();
+  console.log('Données reçues du port série :', key);
 
+  // Vérifie si la donnée reçue est une touche valide (chiffre)
   if (/^\d$/.test(key)) {
     code += key;
     lastKeyTime = Date.now();
     console.log(`Touche appuyée : ${key}`);
   }
 
+  // Vérifie si un code complet est saisi après un délai d'inactivité
   const now = Date.now();
   if (now - lastKeyTime > timeout && code) {
     console.log(`Code complet reçu : ${code}`);
-    io.emit('keypadData', code);
-    code = '';
+    io.emit('keypad-input', code); // Envoi du code au client via WebSocket
+    code = ''; // Réinitialise le code après envoi
   }
 });
 
+// Gestion des connexions Socket.IO
 io.on('connection', (socket) => {
   console.log('Client connecté via Socket.IO');
+
+  // Capture tous les événements pour diagnostic
+  socket.onAny((event, ...args) => {
+    console.log(`Événement reçu : ${event}`, args);
+  });
+
+  // Déconnexion
   socket.on('disconnect', () => {
     console.log('Client déconnecté');
   });
 });
 
+// Gestion des erreurs
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Une erreur est survenue!');

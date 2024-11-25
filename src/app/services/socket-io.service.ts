@@ -1,72 +1,62 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
+import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketIoService {
-  private socket: Socket;
-  private isSocketReady: boolean = false;
+  private socket!: Socket;
 
-  constructor() {
-    // Initialisation du socket, mais ne se connecte pas encore.
-    this.socket = io('http://localhost:5000', { autoConnect: false }); // Ne pas connecter automatiquement
-  }
+  constructor(private ngZone: NgZone) {}
 
-  // Méthode pour démarrer la connexion WebSocket après un délai
-  startSocketConnection(): Observable<boolean> {
+  // Initialise la connexion au WebSocket
+  public startSocketConnection(): Observable<boolean> {
     return new Observable<boolean>((observer) => {
-      this.socket.connect(); // Connexion WebSocket
-      let connectionTimeout = setTimeout(() => {
-        if (!this.isSocketReady) {
-          observer.error('Connexion WebSocket échouée : Timeout');
-          console.error('Timeout de la connexion WebSocket');
-          observer.complete();
+      this.ngZone.runOutsideAngular(() => {
+        try {
+          console.log('Tentative de connexion WebSocket...');
+          this.socket = io('http://localhost:5000'); // Assurez-vous que l'URL est correcte
+          this.socket.on('connect', () => {
+            console.log('WebSocket connecté avec succès.');
+            this.ngZone.run(() => {
+              observer.next(true);
+              observer.complete();
+            });
+          });
+
+          this.socket.on('connect_error', (err: any) => {
+            console.error('Erreur de connexion au WebSocket :', err);
+            this.ngZone.run(() => observer.error(err));
+          });
+        } catch (error) {
+          console.error('Exception lors de la connexion WebSocket :', error);
+          this.ngZone.run(() => observer.error(error));
         }
-      }, 10000); // Timeout après 10 secondes
-  
-      this.socket.on('connect', () => {
-        clearTimeout(connectionTimeout); // Annule le timeout
-        console.log('Connexion WebSocket établie');
-        this.isSocketReady = true;
-        observer.next(true);
-        observer.complete(); // Émission unique
-      });
-  
-      this.socket.on('connect_error', (error) => {
-        clearTimeout(connectionTimeout); // Annule le timeout
-        console.error('Erreur de connexion WebSocket :', error);
-        observer.error(error);
-        observer.complete(); // Complétez après erreur
       });
     });
   }
 
-  // Méthode pour écouter les messages du serveur
-  onMessage(callback: (message: string) => void): void {
-    this.socket.on('keypadData', (data: string) => {
-      console.log('Message reçu du serveur:', data); // Debug pour voir ce qui est envoyé
-      callback(data); // Passer les données au callback fourni
-    });
-  }
-
-  // Méthode pour envoyer des messages au serveur
-  sendMessage(message: string): void {
-    if (this.socket.connected) {
-      console.log('Envoi du message au serveur:', message); // Debug pour voir ce qui est envoyé
-      this.socket.emit('keypadData', message); // Envoie des données avec l'événement 'keypadData'
+  // Écoute des messages WebSocket
+  public onMessage(callback: (message: string) => void): void {
+    if (this.socket) {
+      console.log('Écoute des messages WebSocket démarrée...');
+      this.ngZone.runOutsideAngular(() => {
+        this.socket.on('keypad-input', (message: string) => {
+          console.log('Message reçu depuis le WebSocket :', message); // Vérifier que le message est reçu
+          this.ngZone.run(() => callback(message));
+        });
+      });
     } else {
-      console.error('Le serveur WebSocket n\'est pas connecté');
+      console.warn('WebSocket non connecté : Impossible d\'écouter les messages.');
     }
   }
-
-  // Méthode pour fermer proprement la connexion WebSocket
-  disconnectSocket(): void {
-    if (this.socket.connected) {
-      this.socket.disconnect(); // Fermer la connexion proprement
-      console.log('WebSocket déconnecté');
+  
+  // Déconnexion du WebSocket
+  public disconnectSocket(): void {
+    if (this.socket) {
+      console.log('Déconnexion du WebSocket...');
+      this.socket.disconnect();
     }
   }
 }
