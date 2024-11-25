@@ -43,5 +43,5 @@ app.post('/api/login', async (req, res) => {
 
 // Démarrer le serveur
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${3001}`);
+  console.log(`Server running on http://localhost:${5000}`);
 });

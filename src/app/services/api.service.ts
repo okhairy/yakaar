@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, timeout } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 @Injectable({
@@ -14,53 +14,63 @@ export class ApiService {
 
   // Créer un en-tête avec le token si disponible
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null;
     return token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
   }
+  
 
   // -------- UTILISATEURS --------
 
   // Authentifier un utilisateur par email et mot de passe
   authenticateUser(email: string, motDePasse: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/user/authentifier`, { email, motDePasse })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        timeout(10000),  // Timeout de 10 secondes
+        catchError(this.handleError));
   }
 
   // Authentifier un utilisateur par code secret
   authenticateByCodeSecret(codeSecret: number): Observable<any> {
     return this.http.post(`${this.baseUrl}/user/authentifier/code-secret`, { codeSecret })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        timeout(10000),  // Timeout de 10 secondes
+        catchError(this.handleError));
   }
 
   // Créer un nouvel utilisateur (admin uniquement)
   createUser(user: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/user/inscrire`, user, { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
-  }
+    .pipe(
+      timeout(10000),  // Timeout de 10 secondes
+      catchError(this.handleError));  }
 
   // Mettre à jour un utilisateur existant (admin uniquement)
   updateUser(userId: string, user: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/user/update/${userId}`, user, { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
-  }
+    .pipe(
+      timeout(10000),  // Timeout de 10 secondes
+      catchError(this.handleError));  }
 
   // Supprimer un utilisateur par ID (admin uniquement)
   deleteUser(userId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/user/supprimer/${userId}`, { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
-  }
+    .pipe(
+      timeout(10000),  // Timeout de 10 secondes
+      catchError(this.handleError));  }
 
   // Récupérer tous les utilisateurs (admin uniquement)
   getAllUsers(): Observable<any> {
     return this.http.get(`${this.baseUrl}/user/get-all`, { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
-  }
+    .pipe(
+      timeout(10000),  // Timeout de 10 secondes
+      catchError(this.handleError));  }
 
   // Récupérer un utilisateur par ID
   getUserById(userId: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/user/get/${userId}`, { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
-  }
+    .pipe(
+      timeout(10000),  // Timeout de 10 secondes
+      catchError(this.handleError));  }
 
   // Récupérer les utilisateurs avec pagination
   getUsers(page: number = 1, limit: number = 8): Observable<any> {
@@ -71,7 +81,9 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/user/get-all`, { 
       params,
       headers: this.getAuthHeaders() 
-    }).pipe(catchError(this.handleError));
+    }) .pipe(
+      timeout(10000),  // Timeout de 10 secondes
+      catchError(this.handleError));
   }
 
   // Changer le rôle d'un utilisateur
@@ -86,7 +98,9 @@ export class ApiService {
     return this.http.put(`${this.baseUrl}/user/update-status/${userId}`, 
       { status }, 
       { headers: this.getAuthHeaders() }
-    ).pipe(catchError(this.handleError));
+    ) .pipe(
+      timeout(10000),  // Timeout de 10 secondes
+      catchError(this.handleError));
   }
 
   // Rechercher des utilisateurs
@@ -95,7 +109,9 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/user/search`, {
       params,
       headers: this.getAuthHeaders()
-    }).pipe(catchError(this.handleError));
+    }) .pipe(
+      timeout(10000),  // Timeout de 10 secondes
+      catchError(this.handleError));
   }
 
   // -------- COLLECTES --------

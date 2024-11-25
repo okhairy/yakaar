@@ -1,0 +1,70 @@
+:host {
+    display: block;
+    
+    .success-snackbar {
+      background: #4caf50;
+      color: white;
+    }
+  
+    .error-snackbar {
+      background: #f44336;
+      color: white;
+    }
+  
+    mat-table {
+      width: 100%;
+    }
+  
+    .mat-column-actions {
+      width: 100px;
+      text-align: right;
+    }
+  
+    .mat-column-role,
+    .mat-column-status {
+      width: 150px;
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 500px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    align-items: center;
+  }
+  .modal-overlay {
+    z-index: 1000; /* Toujours au-dessus */
+  }
+  
+  .modal-content {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  

@@ -66,7 +66,7 @@ const io = socketIo(server, {
 // Variables pour stocker le code et la gestion du timeout
 let code = '';
 let lastKeyTime = Date.now();
-const timeout = 3000; // Timeout de 3 secondes pour réinitialiser le code
+const timeout = 10000; // Timeout de 10 secondes pour réinitialiser le code
 
 // Configuration du port série
 const serialPort = new SerialPort({

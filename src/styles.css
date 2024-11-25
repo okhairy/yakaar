@@ -1,10 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+/* Importations CSS */
+@import '@fortawesome/fontawesome-free/css/all.min.css'; /* Utilisation de '~' pour indiquer node_modules */
+@import 'bootstrap/dist/css/bootstrap.min.css'; /* Utilisation de '~' pour indiquer node_modules */
 
-@import 'node_modules/@fortawesome/fontawesome-free/css/all.min.css';
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-@import 'bootstrap/dist/css/bootstrap.min.css';
-
-
-html, body { height: 100%; }
+/* Styles CSS globaux */
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+}

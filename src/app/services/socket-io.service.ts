@@ -7,7 +7,7 @@ import { delay } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class SocketIoService {
-  private socket: Socket ;
+  private socket: Socket  ;
   private isSocketReady: boolean = false;
 
   constructor() {
