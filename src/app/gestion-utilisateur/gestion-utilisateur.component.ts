@@ -65,6 +65,9 @@ searchTerm = '';
 totalUsers = 0;
 showAddForm = false;
 editingUser: User | null = null;
+showConfirmModal = false;
+userToDelete: User | null = null;
+
 currentUserId = ''; // À définir avec l'ID de l'utilisateur connecté
 displayedColumns = ['prenom', 'nom', 'email', 'role', 'status', 'actions'];
 userForm: FormGroup;
@@ -97,6 +100,7 @@ openModal(): void {
 
 closeModal(): void {
   this.showAddForm = false;
+  this.cancelEdit();
 }
 
 
@@ -143,17 +147,36 @@ searchUsers() {
   });
 }
 
-startEdit(user: User) {
+
+ // Méthode pour ouvrir la modal avec l'utilisateur à éditer
+ openEditModal(user: User): void {
   this.editingUser = user;
-  this.userForm.patchValue(user);
-  this.showAddForm = false;
+  this.userForm.patchValue(user); // Pré-remplir le formulaire avec les données de l'utilisateur
 }
 
-cancelEdit() {
+// Méthode pour annuler l'édition
+cancelEdit(): void {
   this.editingUser = null;
-  this.showAddForm = false;
-  this.userForm.reset({ role: 'User' });
+  this.userForm.reset();
 }
+
+// Méthode pour enregistrer les modifications
+saveChanges(): void {
+  if (this.userForm.valid) {
+    const updatedUser = { ...this.userForm.value, id: this.editingUser };
+    this.apiService.updateUser(updatedUser.id, updatedUser).subscribe({  
+          next: (response) => {
+        console.log('Utilisateur modifié', response);
+        this.cancelEdit();  // Fermer la modal après la mise à jour
+      },
+      error: (err) => {
+        console.error('Erreur lors de la modification', err);
+      }
+    });
+  }
+}
+
+
 
 onSubmit(): void {
   if (this.userForm.valid) {
@@ -175,23 +198,33 @@ onSubmit(): void {
   }
 }
 
-
+//methode pour supprimer un user
 deleteUser(user: User) {
-  if (confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ${user.prenom} ${user.nom}?`)) {
-    if (user._id) {
-      this.apiService.deleteUser(user._id).subscribe({
-        next: () => {
-          this.showNotification('Utilisateur supprimé avec succès', 'success');
-          this.loadUsers();
-        },
-        error: () => {
-          this.showNotification('Erreur lors de la suppression', 'error');
-        }
-      });
-    }
-  }
+  this.userToDelete = user;
+  this.showConfirmModal = true;
 }
 
+cancelDelete() {
+  this.showConfirmModal = false;
+  this.userToDelete = null;
+}
+
+confirmDelete() {
+  if (this.userToDelete && this.userToDelete._id) {
+    this.apiService.deleteUser(this.userToDelete._id).subscribe({
+      next: () => {
+        this.showNotification('Utilisateur supprimé avec succès', 'success');
+        this.loadUsers();
+        this.showConfirmModal = false;
+        this.userToDelete = null;
+      },
+      error: () => {
+        this.showNotification('Erreur lors de la suppression', 'error');
+        this.showConfirmModal = false;
+      }
+    });
+  }
+}
  // Méthode pour basculer le rôle de l'utilisateur
   toggleUserRole(user: User) {
     // Si l'utilisateur n'a pas d'_id, on ne fait rien
