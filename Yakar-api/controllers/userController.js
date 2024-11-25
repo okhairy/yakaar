@@ -59,7 +59,7 @@ exports.inscrireUser = async (req, res) => {
       motDePasse,
       codeSecret,
       role,
-      photo,
+      
       telephone,  
       sexe  
     });
@@ -77,7 +77,6 @@ exports.inscrireUser = async (req, res) => {
 exports.authentifier = async (req, res) => {
   try {
     const { email, motDePasse } = req.body;
-
     // Rechercher l'utilisateur par email
     const user = await User.findOne({ email });
 
@@ -85,7 +84,7 @@ exports.authentifier = async (req, res) => {
       // L'email n'existe pas dans la base de données
       return res.status(401).json({ error: 'Email non trouvé. Veuillez vérifier votre email.' });
     }
-
+   
     if (user.motDePasse !== motDePasse) {
       // L'email est correct mais le mot de passe est incorrect
       return res.status(401).json({ error: 'Mot de passe incorrect. Veuillez réessayer.' });
@@ -295,7 +294,7 @@ exports.changerRole = async (req, res) => {
     // Vérifier le rôle actuel et le changer
     user.role = user.role === 'admin' ? 'simple' : 'admin';
     await user.save(); // Enregistrer les modifications
-
+    console.log("succes")
     res.status(200).json({
       message: 'Rôle de l\'utilisateur mis à jour avec succès',
       user: { id: user._id, nom: user.nom, prenom: user.prenom, role: user.role }

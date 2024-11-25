@@ -23,19 +23,20 @@ export class LoginComponent {
     // Initialisation de loginForm avec validation
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      motDePasse: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
   onSubmit(): void {
     this.errorMessage = ''; // Réinitialiser le message d'erreur avant la soumission
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+      const { email, motDePasse } = this.loginForm.value;
   
-      this.apiService.authenticateUser(email, password).subscribe(
+      this.apiService.authenticateUser(email, motDePasse).subscribe(
         (response: any) => {
           if (response.token && response.user?.role) {
             localStorage.setItem('token', response.token);
+            console.log(response.user.role)
             if (response.user.role === 'admin') {
               this.router.navigate(['/admin-dashboard']);
             } else if (response.user.role === 'simple') {

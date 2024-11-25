@@ -116,7 +116,7 @@ router.post('/authentifier/code-secret', userController.authentifierParCodeSecre
  *       403:
  *         description: Accès interdit, l'utilisateur ne peut pas s'inscrire
  */
-router.post('/inscrire', verifyToken, verifyRole('admin'), userController.inscrireUser);
+router.post('/inscrire', userController.inscrireUser);
 
 
 /**
@@ -157,7 +157,7 @@ router.post('/inscrire', verifyToken, verifyRole('admin'), userController.inscri
  *       404:
  *         description: Utilisateur non trouvé
  */
-router.put('/update/:id', verifyToken, verifyRole('admin'), userController.updateUser);
+router.put('/update/:id', userController.updateUser);
 
 /**
  * @swagger
@@ -214,7 +214,7 @@ router.delete('/supprimer/:id', verifyToken, verifyRole('admin'), userController
  *       403:
  *         description: Accès interdit
  */
-router.get('/get-all', verifyToken, verifyRole('admin'), userController.getAllUsers);
+router.get('/get-all',  userController.getAllUsers);
 
 /**
  * @swagger
@@ -337,7 +337,7 @@ router.post('/deconnexion', userController.deconnexion);
  *       403:
  *         description: Un token est requis pour accéder à cette ressource
  */
-router.patch('/changer-role/:userId', verifyToken, verifyRole('admin'), userController.changerRole); 
+router.patch('/changer-role/:userId', userController.changerRole); 
 
 /**
  * @swagger

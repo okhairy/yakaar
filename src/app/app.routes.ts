@@ -12,7 +12,7 @@ export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirection par défaut
   { path: 'login', component: LoginComponent },
   { path: 'auth/code-secret', component: CodeSecretComponent },
- // { path: 'admin-dashboard', component: AdminDashboardComponent },
+  { path: 'admin-dashboard', component: GestionUtilisateurComponent },
   { path: 'user-dashboard', component: UserDashboardComponent },
   {path: 'gestion-utilisateur', component: GestionUtilisateurComponent},
   

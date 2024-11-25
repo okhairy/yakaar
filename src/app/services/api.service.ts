@@ -39,6 +39,7 @@ export class ApiService {
 
   // Créer un nouvel utilisateur (admin uniquement)
   createUser(user: any): Observable<any> {
+    
     return this.http.post(`${this.baseUrl}/user/inscrire`, user, { headers: this.getAuthHeaders() })
     .pipe(
       timeout(10000),  // Timeout de 10 secondes
@@ -87,8 +88,8 @@ export class ApiService {
   }
 
   // Changer le rôle d'un utilisateur
-  toggleUserRole(userId: string): Observable<any> {
-    return this.http.put(`${this.baseUrl}/user/toggle-role/${userId}`, {}, {
+  toggleUserRole(userId: string, newRole: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/user/changer-role/${userId}`, { role: newRole }, {
       headers: this.getAuthHeaders()
     }).pipe(catchError(this.handleError));
   }

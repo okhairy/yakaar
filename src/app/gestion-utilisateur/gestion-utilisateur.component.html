@@ -4,7 +4,7 @@
 <div class="container mx-auto p-4">
     <!-- En-tête avec barre de recherche -->
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Gestion des utilisateurs</h1>
+    
       <div class="flex gap-4">
         <mat-form-field>
           <mat-label>Rechercher</mat-label>
@@ -21,45 +21,91 @@
 
 <!-- Modal -->
 <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" *ngIf="showAddForm">
-    <div class="modal-content bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">
-        {{ editingUser ? 'Modifier' : 'Ajouter' }} un utilisateur
-      </h2>
-      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-        <div class="grid grid-cols-1 gap-6">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Prénom</mat-label>
-            <input matInput formControlName="prenom" placeholder="Entrez le prénom">
-          </mat-form-field> <br>
-  
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Nom</mat-label>
-            <input matInput formControlName="nom" placeholder="Entrez le nom">
-          </mat-form-field><br>
-  
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" placeholder="Entrez l'adresse email">
-          </mat-form-field><br>
-  
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Rôle</mat-label>
-            <mat-select formControlName="role">
-              <mat-option value="User">Utilisateur</mat-option>
-              <mat-option value="Admin">Administrateur</mat-option>
-            </mat-select>
+  <div class="modal-content bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">
+      Ajouter un utilisateur
+    </h2>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 gap-6">
+        <!-- Prénom -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Prénom</mat-label>
+          <input matInput formControlName="prenom" placeholder="Entrez le prénom" required>
+        </mat-form-field> 
+
+        <!-- Nom -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="nom" placeholder="Entrez le nom" required>
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="Entrez l'adresse email" required>
+        </mat-form-field>
+
+        <!-- Mot de passe -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput formControlName="motDePasse" type="password" placeholder="Entrez le mot de passe" required>
+        </mat-form-field>
+
+         <!-- Code secret -->
+         <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Code secret</mat-label>
+            <input matInput formControlName="codeSecret" type="text" placeholder="4 chiffres max">
+            <mat-hint>4 chiffres maximum</mat-hint>
           </mat-form-field>
-        </div>
   
-        <div class="flex justify-end gap-4 mt-6">
-          <button mat-button type="button" class="text-red-500 hover:bg-red-50" (click)="closeModal()">Annuler</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">
-            {{ editingUser ? 'Modifier' : 'Ajouter' }}
-          </button>
-        </div>
-      </form>
-    </div>
+
+        <!-- Téléphone -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Téléphone</mat-label>
+          <input 
+            matInput 
+            formControlName="telephone" 
+            type="tel" 
+            placeholder="Exemple : 77XXXXXXX" 
+            required>
+          <mat-error *ngIf="userForm.get('telephone')?.hasError('required')">Le téléphone est requis</mat-error>
+          <mat-error *ngIf="userForm.get('telephone')?.hasError('pattern')">
+            Le téléphone doit commencer par 70, 75, 76, 77 ou 78 et comporter 9 chiffres
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Sexe -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Sexe</mat-label>
+          <mat-select formControlName="sexe" required>
+            <mat-option value="Homme">Homme</mat-option>
+            <mat-option value="Femme">Femme</mat-option>
+            <mat-option value="Autre">Autre</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Rôle -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Rôle</mat-label>
+          <mat-select formControlName="role" required>
+            <mat-option value="simple">Utilisateur</mat-option>
+            <mat-option value="admin">Administrateur</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Boutons -->
+      <div class="flex justify-end gap-4 mt-6">
+        <button mat-button type="button" class="text-red-500 hover:bg-red-50" (click)="closeModal()">Annuler</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">
+          Ajouter
+        </button>
+      </div>
+    </form>
   </div>
+</div>
+
+  
   
 
     <!-- Table des utilisateurs -->
@@ -110,9 +156,63 @@
           <button mat-icon-button color="primary" (click)="startEdit(user)">
             <mat-icon>edit</mat-icon>
           </button>
+          
+          <!-- Modal de modification -->
+<div *ngIf="editingUser" class="modal">
+    <div class="modal-content">
+      <h2>Modifier l'utilisateur</h2>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div>
+          <label for="prenom">Prénom:</label>
+          <input id="prenom" formControlName="prenom" type="text">
+        </div>
+        <div>
+          <label for="nom">Nom:</label>
+          <input id="nom" formControlName="nom" type="text">
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input id="email" formControlName="email" type="email">
+        </div>
+        <div>
+          <label for="motDePasse">Mot de passe:</label>
+          <input id="motDePasse" formControlName="motDePasse" type="password">
+        </div>
+        <div>
+          <label for="codeSecret">Code secret:</label>
+          <input id="codeSecret" formControlName="codeSecret" type="number">
+        </div>
+        <div>
+          <label for="telephone">Numéro de téléphone:</label>
+          <input id="telephone" formControlName="telephone" type="text">
+        </div>
+        <div>
+          <label for="sexe">Sexe:</label>
+          <select id="sexe" formControlName="sexe">
+            <option value="m">Masculin</option>
+            <option value="f">Féminin</option>
+          </select>
+        </div>
+        <div>
+          <label for="role">Rôle:</label>
+          <select id="role" formControlName="role">
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button type="submit" [disabled]="userForm.invalid">Modifier</button>
+          <button type="button" (click)="cancelEdit()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+          
           <button mat-icon-button color="warn" (click)="deleteUser(user)" [disabled]="user._id === currentUserId">
             <mat-icon>delete</mat-icon>
           </button>
+          
         </mat-cell>
       </ng-container>
 

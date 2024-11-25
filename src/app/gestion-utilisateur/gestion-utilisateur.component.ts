@@ -24,6 +24,10 @@ interface User {
   email: string;
   role: 'Admin' | 'User';
   status?: boolean;
+  motDePasse:String;
+  codeSecret:Number;
+  telephone:Number;
+  sexe: 'm' | 'f'
 }
 
 
@@ -54,9 +58,6 @@ export class GestionUtilisateurComponent {
 
 
 
-
-
-
 users: User[] = [];
 currentPage = 1;
 itemsPerPage = 8;
@@ -74,11 +75,19 @@ constructor(
   private apiService: ApiService
 ) {
   this.userForm = this.fb.group({
-       prenom: ['', [Validators.required, Validators.minLength(2)]],
-      nom: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      role: ['', [Validators.required]]
-    });
+    prenom: ['', [Validators.required]],
+    nom: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    motDePasse: ['', [Validators.required, Validators.minLength(8)]],
+    codeSecret: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
+    telephone: [
+      '',
+      [Validators.required, Validators.pattern(/^(70|75|76|77|78)\d{7}$/)]
+    ], // Préfixe valide suivi de 7 chiffres
+    sexe: ['', [Validators.required]],
+    role: ['', [Validators.required]]
+  });
+  
 }
 
 
@@ -105,7 +114,8 @@ loadUsers() {
   } else {
     this.apiService.getUsers(this.currentPage, this.itemsPerPage).subscribe({
       next: (response) => {
-        this.users = response.users;
+        this.users = response;
+        console.log(this.users)
         this.totalUsers = response.total;
       },
       error: () => {
@@ -149,32 +159,17 @@ onSubmit(): void {
   if (this.userForm.valid) {
     const userData = this.userForm.value;
 
-    // Si on est en mode édition
-    if (this.editingUser && this.editingUser._id) {
-      this.apiService.updateUser(this.editingUser._id, userData).subscribe({
-        next: () => {
-          this.showNotification('Utilisateur modifié avec succès', 'success');
-          this.loadUsers(); // Recharge la liste des utilisateurs
-          this.closeModal(); // Ferme la modal
-        },
-        error: () => {
-          this.showNotification('Erreur lors de la modification', 'error');
-        }
-      });
-    } 
-    // Si on est en mode ajout
-    else {
-      this.apiService.createUser(userData).subscribe({
-        next: () => {
-          this.showNotification('Utilisateur ajouté avec succès', 'success');
-          this.loadUsers(); // Recharge la liste des utilisateurs
-          this.closeModal(); // Ferme la modal
-        },
-        error: () => {
-          this.showNotification('Erreur lors de l\'ajout', 'error');
-        }
-      });
-    }
+    // Appel au service pour créer un nouvel utilisateur
+    this.apiService.createUser(userData).subscribe({
+      next: () => {
+        this.showNotification('Utilisateur ajouté avec succès', 'success');
+        this.loadUsers(); // Recharge la liste des utilisateurs
+        this.closeModal(); // Ferme la modal
+      },
+      error: () => {
+        this.showNotification('Erreur lors de l\'ajout de l\'utilisateur', 'error');
+      }
+    });
   } else {
     this.showNotification('Veuillez remplir tous les champs requis.', 'error');
   }
@@ -197,19 +192,27 @@ deleteUser(user: User) {
   }
 }
 
-toggleUserRole(user: User) {
-  if (user._id) {
-    this.apiService.toggleUserRole(user._id).subscribe({
+ // Méthode pour basculer le rôle de l'utilisateur
+  toggleUserRole(user: User) {
+    // Si l'utilisateur n'a pas d'_id, on ne fait rien
+    if (!user._id) return;
+
+    // Change le rôle en fonction de l'état actuel (Admin -> User et vice versa)
+    const newRole = user.role === 'Admin' ? 'User' : 'Admin';
+
+    // Appelez votre service pour mettre à jour le rôle de l'utilisateur
+    this.apiService.toggleUserRole(user._id, newRole).subscribe({
       next: () => {
+        // Recharge les utilisateurs et affiche une notification de succès
         this.loadUsers();
         this.showNotification('Rôle modifié avec succès', 'success');
       },
       error: () => {
+        // Affiche une notification d'erreur en cas de problème
         this.showNotification('Erreur lors du changement de rôle', 'error');
       }
     });
   }
-}
 
 updateUserStatus(user: User) {
   if (user._id && user.status !== undefined) {

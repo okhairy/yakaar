@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
   dateCreation: { type: Date, default: Date.now },
   dateModification: { type: Date, default: Date.now },
   telephone: { type: String, required: true, unique: true },  
-  sexe: { type: String, enum: ['Homme', 'Femme'], required: true }  
+  sexe: { type: String, enum: ['Homme', 'Femme'], required: true } ,
+   
 });
 
 module.exports = mongoose.model('User', userSchema);
