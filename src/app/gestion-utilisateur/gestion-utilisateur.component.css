@@ -1,191 +1,190 @@
 :host {
-    display: block;
-    
-    .success-snackbar {
-      background: #4caf50;
-      color: white;
-    }
+  display: block;
   
-    .error-snackbar {
-      background: #f44336;
-      color: white;
-    }
-  
-    mat-table {
-      width: 100%;
-    }
-  
-    .mat-column-actions {
-      width: 100px;
-      text-align: right;
-    }
-  
-    .mat-column-role,
-    .mat-column-status {
-      width: 150px;
-    }
+  .success-snackbar {
+    background: #4caf50;
+    color: white;
   }
 
+  .error-snackbar {
+    background: #f44336;
+    color: white;
+  }
+
+  mat-table {
+    width: 100%;
+  }
+
+  .mat-column-actions {
+    width: 100px;
+    text-align: right;
+  }
+
+  .mat-column-role,
+  .mat-column-status {
+    width: 150px;
+  }
+}
 
 
-  /* Styles généraux pour le modal */
+
+/* Styles généraux pour le modal */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
 }
 
 .modal-content {
-  background-color: white; /* Fond blanc pour le contenu */
-  border-radius: 8px; /* Coins arrondis */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombre */
-  padding: 20px; /* Espacement interne */
-  max-width: 500px; /* Largeur maximale */
-  width: 90%; /* Largeur adaptative */
-  animation: fadeIn 0.3s ease-in-out; /* Animation */
+background-color: white; /* Fond blanc pour le contenu */
+border-radius: 8px; /* Coins arrondis */
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombre */
+padding: 20px; /* Espacement interne */
+max-width: 500px; /* Largeur maximale */
+width: 90%; /* Largeur adaptative */
+animation: fadeIn 0.3s ease-in-out; /* Animation */
 }
 
 /* Animation d'apparition */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+to {
+  opacity: 1;
+  transform: translateY(0);
+}
 }
 
 /* Style pour les titres */
 .modal-content h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  margin-bottom: 20px;
+font-size: 1.5rem;
+font-weight: bold;
+color: #333;
+text-align: center;
+margin-bottom: 20px;
 }
 
 /* Styles pour les champs de formulaire */
 .mat-form-field {
-  width: 100%;
+width: 100%;
 }
 
 /* Boutons dans le modal */
 .modal-content button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+padding: 10px 15px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
 }
 
 .modal-content button:hover {
-  opacity: 0.9;
+opacity: 0.9;
 }
 
 .modal-content .text-red-500 {
-  background-color: #ffcccc; /* Rouge clair */
-  color: #cc0000; /* Rouge */
+background-color: #ffcccc; /* Rouge clair */
+color: #cc0000; /* Rouge */
 }
 
 .modal-content .text-red-500:hover {
-  background-color: #ffb3b3; /* Rouge légèrement plus clair */
+background-color: #ffb3b3; /* Rouge légèrement plus clair */
 }
 
 .modal-content .mat-raised-button {
-  background-color: #007bff; /* Couleur primaire */
-  color: white; /* Texte blanc */
+background-color: #007bff; /* Couleur primaire */
+color: white; /* Texte blanc */
 }
 
 .modal-content .mat-raised-button:hover {
-  background-color: #0056b3; /* Couleur primaire foncée */
+background-color: #0056b3; /* Couleur primaire foncée */
 }
 
 /* Espacement entre les champs */
 .grid-cols-1 {
-  gap: 16px;
+gap: 16px;
 }
 
 /* Espacement pour les boutons */
 .flex.justify-end {
-  gap: 12px;
+gap: 12px;
 }
 
 
 /* Style pour la superposition de la modal */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Assure que la modal est au-dessus des autres éléments */
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000; /* Assure que la modal est au-dessus des autres éléments */
 }
 
 /* Style pour le contenu de la modal */
 .modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  min-width: 300px;
-  max-width: 500px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
+background-color: white;
+padding: 20px;
+border-radius: 8px;
+min-width: 300px;
+max-width: 500px;
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+display: flex;
+flex-direction: column;
 }
 
 .modal-content h3 {
-  margin-bottom: 20px;
-  text-align: center;
+margin-bottom: 20px;
+text-align: center;
 }
 
 .form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+display: flex;
+justify-content: flex-end;
+gap: 10px;
 }
 
 button {
-  padding: 10px 20px;
+padding: 10px 20px;
 }
 
 
 
- .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 5px;
-      width: 400px;
-    }
-    .modal-actions {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
 
 
-  
-  
+

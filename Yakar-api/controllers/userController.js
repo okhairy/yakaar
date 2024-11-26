@@ -47,7 +47,7 @@ const validateUserInput = (nom, prenom, email, motDePasse, codeSecret, telephone
 
 exports.inscrireUser = async (req, res) => {
   try {
-    const { nom, prenom, email, motDePasse, codeSecret, role, photo, telephone, sexe } = req.body;
+    const { nom, prenom, email, motDePasse, codeSecret, role, telephone, sexe } = req.body;
 
     console.log('Début de l\'inscription'); // Log de début
 
@@ -309,9 +309,11 @@ exports.activerDesactiverVentilateur = async (req, res) => {
 
 exports.changerRole = async (req, res) => {
   try {
-    const { userId } = req.params; // Récupérer l'ID de l'utilisateur à modifier
+    const {userId}  = req.params; // Récupérer l'ID de l'utilisateur à modifier
+   
     const user = await User.findById(userId);
-
+   
+    
     if (!user) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
@@ -328,7 +330,3 @@ exports.changerRole = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la mise à jour du rôle de l\'utilisateur' });
   }
 };
-
-
-
-

@@ -220,7 +220,7 @@ router.get('/get-all',  userController.getAllUsers);
  * @swagger
  * /api/user/get/{id}:
  *   get:
- *     summary: Récupérer un utilisateur par ID
+ *     summary: Récupérer un uti                                                                                    lisateur par ID
  *     tags: [User]
  *     parameters:
  *       - in: path

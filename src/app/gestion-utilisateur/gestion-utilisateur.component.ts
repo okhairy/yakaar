@@ -165,7 +165,7 @@ cancelEdit(): void {
 // Méthode pour enregistrer les modifications
 saveChanges(): void {
   if (this.userForm.valid) {
-    const updatedUser = { ...this.userForm.value, id: this.editingUser };
+    const updatedUser = { ...this.userForm.value, id: this.editingUser?._id };
     this.apiService.updateUser(updatedUser.id, updatedUser).subscribe({  
           next: (response) => {
         console.log('Utilisateur modifié', response);
