@@ -87,6 +87,8 @@ export class ApiService {
       catchError(this.handleError));
   }
 
+  
+
   // Changer le rôle d'un utilisateur
   toggleUserRole(userId: string, newRole: string): Observable<any> {
     return this.http.patch(`${this.baseUrl}/user/changer-role/${userId}`, { role: newRole }, {

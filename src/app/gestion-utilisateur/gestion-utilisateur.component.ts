@@ -12,6 +12,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { ApiService } from '../services/api.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { PageEvent } from '@angular/material/paginator';
 
 
 
@@ -67,6 +68,7 @@ showAddForm = false;
 editingUser: User | null = null;
 showConfirmModal = false;
 userToDelete: User | null = null;
+
 
 currentUserId = ''; // À définir avec l'ID de l'utilisateur connecté
 displayedColumns = ['prenom', 'nom', 'email', 'role', 'status', 'actions'];
@@ -249,10 +251,13 @@ confirmDelete() {
 
 updateUserStatus(user: User) {
   if (user._id && user.status !== undefined) {
-    this.apiService.updateUserStatus(user._id, user.status).subscribe({
-      next: () => {
+    this.apiService.updateUserStatus(user._id, !user.status).subscribe({
+      next: (response) => {
+        user.status = !user.status;
+
         this.loadUsers();
-        this.showNotification('Statut modifié avec succès', 'success');
+        this.showNotification( `Utilisateur ${user.prenom} ${user.nom} ${user.status ? 'activé' : 'désactivé'}`, 
+          'success');
       },
       error: () => {
         this.showNotification('Erreur lors du changement de statut', 'error');
@@ -261,7 +266,9 @@ updateUserStatus(user: User) {
   }
 }
 
-onPageChange(event: any) {
+onPageChange(event: PageEvent) {
+      // MatPaginator renvoie un index commençant à 0, donc on ajoute 1
+
   this.currentPage = event.pageIndex + 1;
   this.itemsPerPage = event.pageSize;
   this.loadUsers();
