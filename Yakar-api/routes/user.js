@@ -9,13 +9,6 @@ const { verifyToken, verifyRole } = require('../middlewares/authMiddleware');
  *   post:
  *     summary: Authentifier un utilisateur
  *     tags: [User]
-<<<<<<< HEAD
- *     responses:
- *       200:
- *         description: Authentification réussie
- *       401:
- *         description: Authentification échouée
-=======
  *     requestBody:
  *       required: true
  *       content:
@@ -44,7 +37,6 @@ const { verifyToken, verifyRole } = require('../middlewares/authMiddleware');
  *                   description: Token JWT pour les futures requêtes
  *       401:
  *         description: Authentification échouée, informations d'identification incorrectes
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  */
 router.post('/authentifier', userController.authentifier);
 
@@ -54,13 +46,6 @@ router.post('/authentifier', userController.authentifier);
  *   post:
  *     summary: Authentifier un utilisateur avec un code secret
  *     tags: [User]
-<<<<<<< HEAD
- *     responses:
- *       200:
- *         description: Authentification réussie avec code secret
- *       401:
- *         description: Authentification échouée
-=======
  *     requestBody:
  *       required: true
  *       content:
@@ -89,7 +74,6 @@ router.post('/authentifier', userController.authentifier);
  *                   description: Token JWT pour les futures requêtes
  *       401:
  *         description: Authentification échouée, code secret incorrect
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  */
 router.post('/authentifier/code-secret', userController.authentifierParCodeSecret);
 // http://localhost:5000/api/user/authentifier/code-secret
@@ -106,8 +90,6 @@ router.post('/authentifier/code-secret', userController.authentifierParCodeSecre
  *     tags: [User]
  *     security:
  *       - Bearer: []
-<<<<<<< HEAD
-=======
  *     requestBody:
  *       required: true
  *       content:
@@ -128,23 +110,15 @@ router.post('/authentifier/code-secret', userController.authentifierParCodeSecre
  *                  description: "Rôle de l'utilisateur (ex: admin, utilisateur)"
 
  *                 example: "utilisateur"
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *     responses:
  *       201:
  *         description: Utilisateur inscrit avec succès
  *       403:
-<<<<<<< HEAD
- *         description: Accès interdit
- */
-router.post('/inscrire', verifyToken, verifyRole('admin'), userController.inscrireUser);
-
-=======
  *         description: Accès interdit, l'utilisateur ne peut pas s'inscrire
  */
 router.post('/inscrire', verifyToken, verifyRole('admin'), userController.inscrireUser);
 
 
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
 /**
  * @swagger
  * /api/user/update/{id}:
@@ -160,8 +134,6 @@ router.post('/inscrire', verifyToken, verifyRole('admin'), userController.inscri
  *           type: string
  *     security:
  *       - Bearer: []
-<<<<<<< HEAD
-=======
  *     requestBody:
  *       required: true
  *       content:
@@ -177,7 +149,6 @@ router.post('/inscrire', verifyToken, verifyRole('admin'), userController.inscri
  *                 type: string
  *                 description: Nouveau rôle de l'utilisateur
  *                 example: "admin"
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *     responses:
  *       200:
  *         description: Utilisateur mis à jour avec succès
@@ -224,8 +195,6 @@ router.delete('/supprimer/:id', verifyToken, verifyRole('admin'), userController
  *     responses:
  *       200:
  *         description: Liste des utilisateurs
-<<<<<<< HEAD
-=======
  *         content:
  *           application/json:
  *             schema:
@@ -242,7 +211,6 @@ router.delete('/supprimer/:id', verifyToken, verifyRole('admin'), userController
  *                   role:
  *                     type: string
  *                     description: Rôle de l'utilisateur
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       403:
  *         description: Accès interdit
  */
@@ -266,8 +234,6 @@ router.get('/get-all', verifyToken, verifyRole('admin'), userController.getAllUs
  *     responses:
  *       200:
  *         description: Utilisateur trouvé
-<<<<<<< HEAD
-=======
  *         content:
  *           application/json:
  *             schema:
@@ -282,7 +248,6 @@ router.get('/get-all', verifyToken, verifyRole('admin'), userController.getAllUs
  *                 role:
  *                   type: string
  *                   description: Rôle de l'utilisateur
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       404:
  *         description: Utilisateur non trouvé
  */
@@ -296,8 +261,6 @@ router.get('/get/:id', verifyToken, userController.getUserById);
  *     tags: [User]
  *     security:
  *       - Bearer: []
-<<<<<<< HEAD
-=======
  *     requestBody:
  *       required: true
  *       content:
@@ -309,7 +272,6 @@ router.get('/get/:id', verifyToken, userController.getUserById);
  *                 type: boolean
  *                 description: État du ventilateur, true pour activer, false pour désactiver
  *                 example: true
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *     responses:
  *       200:
  *         description: État du ventilateur mis à jour
@@ -319,8 +281,6 @@ router.get('/get/:id', verifyToken, userController.getUserById);
 router.put('/ventilateur', verifyToken, verifyRole('admin'), userController.activerDesactiverVentilateur);
 
 
-<<<<<<< HEAD
-=======
 
 /**
  * @swagger
@@ -414,5 +374,4 @@ router.delete('/delete-multiple', verifyToken, verifyRole('admin'), userControll
 
 
 
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
 module.exports = router;

@@ -8,8 +8,6 @@ const collecteController = require('../controllers/collecteController');
  *   post:
  *     summary: Créer une nouvelle collecte
  *     tags: [Collecte]
-<<<<<<< HEAD
-=======
  *     requestBody:
  *       required: true
  *       content:
@@ -34,16 +32,11 @@ const collecteController = require('../controllers/collecteController');
  *                 type: string
  *                 description: Commentaire facultatif sur la collecte
  *                 example: "Collecte du matin"
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *     responses:
  *       201:
  *         description: Collecte créée avec succès
  *       400:
-<<<<<<< HEAD
- *         description: Requête invalide
-=======
  *         description: Requête invalide, par exemple si des données sont manquantes
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  */
 router.post('/creer', collecteController.creerCollecte);
 
@@ -60,20 +53,14 @@ router.post('/creer', collecteController.creerCollecte);
  *         required: false
  *         schema:
  *           type: integer
-<<<<<<< HEAD
-=======
  *           example: 1
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       - in: query
  *         name: limit
  *         description: Nombre d'éléments par page
  *         required: false
  *         schema:
  *           type: integer
-<<<<<<< HEAD
-=======
  *           example: 10
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       - in: query
  *         name: startDate
  *         description: Date de début pour filtrer les collectes
@@ -81,10 +68,7 @@ router.post('/creer', collecteController.creerCollecte);
  *         schema:
  *           type: string
  *           format: date
-<<<<<<< HEAD
-=======
  *           example: "2023-10-01"
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       - in: query
  *         name: endDate
  *         description: Date de fin pour filtrer les collectes
@@ -92,11 +76,6 @@ router.post('/creer', collecteController.creerCollecte);
  *         schema:
  *           type: string
  *           format: date
-<<<<<<< HEAD
- *     responses:
- *       200:
- *         description: Liste des collectes récupérée avec succès
-=======
  *           example: "2023-10-31"
  *     responses:
  *       200:
@@ -123,7 +102,6 @@ router.post('/creer', collecteController.creerCollecte);
  *                     description: Humidité enregistrée
  *       400:
  *         description: Requête invalide
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  */
 router.get('/get-all', collecteController.getAllCollectes);
 
@@ -147,8 +125,6 @@ router.get('/get-all', collecteController.getAllCollectes);
  *     responses:
  *       200:
  *         description: Collecte trouvée
-<<<<<<< HEAD
-=======
  *         content:
  *           application/json:
  *             schema:
@@ -167,16 +143,11 @@ router.get('/get-all', collecteController.getAllCollectes);
  *                 humidite:
  *                   type: number
  *                   description: Humidité enregistrée
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       404:
  *         description: Collecte non trouvée
  */
 router.get('/get/:id', collecteController.getCollecteById);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
 /**
  * @swagger
  * /api/collecte/periode:
@@ -191,10 +162,7 @@ router.get('/get/:id', collecteController.getCollecteById);
  *         schema:
  *           type: string
  *           format: date
-<<<<<<< HEAD
-=======
  *           example: "2023-10-01"
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       - in: query
  *         name: endDate
  *         description: Date de fin pour filtrer les collectes
@@ -202,11 +170,6 @@ router.get('/get/:id', collecteController.getCollecteById);
  *         schema:
  *           type: string
  *           format: date
-<<<<<<< HEAD
- *     responses:
- *       200:
- *         description: Liste des collectes récupérée par période
-=======
  *           example: "2023-10-31"
  *     responses:
  *       200:
@@ -231,15 +194,10 @@ router.get('/get/:id', collecteController.getCollecteById);
  *                   humidite:
  *                     type: number
  *                     description: Humidité enregistrée
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       400:
  *         description: Requête invalide
  */
 router.get('/periode', collecteController.getCollectesByDate);
-<<<<<<< HEAD
-
-=======
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
 // Exemple: http://localhost:5000/api/collecte/periode?startDate=2023-11-01&endDate=2023-11-30
 
 
@@ -257,11 +215,6 @@ router.get('/periode', collecteController.getCollectesByDate);
  *         schema:
  *           type: string
  *           format: date
-<<<<<<< HEAD
- *     responses:
- *       200:
- *         description: Moyenne quotidienne trouvée
-=======
  *           example: "2023-10-01"
  *     responses:
  *       200:
@@ -281,7 +234,6 @@ router.get('/periode', collecteController.getCollectesByDate);
  *                 moyenneHumidite:
  *                   type: number
  *                   description: Moyenne des humidités pour la date
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       404:
  *         description: Aucune collecte trouvée pour cette date
  */
@@ -304,11 +256,6 @@ router.get('/moyenne-journaliere', collecteController.getDailyAverage);
  *         schema:
  *           type: string
  *           format: date
-<<<<<<< HEAD
- *     responses:
- *       200:
- *         description: Historique hebdomadaire trouvé
-=======
  *           example: "2023-10-01"
  *     responses:
  *       200:
@@ -329,17 +276,12 @@ router.get('/moyenne-journaliere', collecteController.getDailyAverage);
  *                 moyenneHumidite:
  *                   type: number
  *                   description: Moyenne des humidités pour la journée
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
  *       400:
  *         description: Requête invalide
  */
 router.get('/historique-hebdomadaire', collecteController.getWeeklyHistory);
 
-<<<<<<< HEAD
-// Exemple: http://localhost:5000/api/collecte/historique-hebdomadaire?startDate=2023-11-10
-=======
 // Exemple: http://localhost:5000/api/collecte/historique-hebdomadaire?startDate=2023-11-10   (14)
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
 
 
 module.exports = router;

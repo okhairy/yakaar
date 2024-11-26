@@ -13,8 +13,8 @@ import { faTachometerAlt, faUsers } from '@fortawesome/free-solid-svg-icons';
   imports: [CommonModule, FormsModule, FontAwesomeModule]
 })
 export class DashboardComponent implements AfterViewInit {
-  temperature = 25;
-  humidity = 60;
+  temperature: string = "--°C";
+  humidity: string = "--°%";
   fanStatus = false;
   faTachometerAlt = faTachometerAlt;
   faUsers = faUsers;

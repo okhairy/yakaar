@@ -7,11 +7,11 @@ const path = require('path');
 // Image en fonction de l'humidité
 const getImageForHumidity = (humidity) => {
   if (humidity > 80) {
-    return '/images/high-humidity.png';
+    return '/assets/high-img.png';
   } else if (humidity > 50) {
-    return '/images/medium-humidity.png';
+    return '/assets/medium-img.png';
   } else {
-    return '/images/low-humidity.png';
+    return '/assets/low-img.png';
   }
 };
 

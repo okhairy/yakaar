@@ -21,16 +21,11 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.11",
-<<<<<<< HEAD
     "@fortawesome/angular-fontawesome": "^0.15.0",
-    "@fortawesome/fontawesome-free": "^6.7.0",
+    "@fortawesome/fontawesome-free": "^6.7.1",
     "@fortawesome/free-solid-svg-icons": "^6.7.0",
-    "chart.js": "^4.4.6",
-=======
-    "@fortawesome/fontawesome-free": "^6.6.0",
-    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
+    "chart.js": "^4.4.6",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "socket.io": "^4.8.1",
@@ -52,14 +47,5 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2"
-<<<<<<< HEAD
   }
-=======
-  },
-  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.11.",
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
->>>>>>> aaf84928c5979742508d4548159d7b1b6f39512d
 }
