@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Collecte = require('../models/Collecte');
 const jwt = require('jsonwebtoken');
 const BlacklistToken = require('../models/blacklistToken');
+const crypto = require('crypto');
 
 
 
@@ -90,9 +91,8 @@ exports.authentifier = async (req, res) => {
       });
     }
 
-    // Comparaison du mot de passe avec bcrypt (si vous utilisez bcrypt pour le hachage)
-    const motDePasseValide = await bcrypt.compare(motDePasse, user.motDePasse);
-    if (!motDePasseValide) {
+    // Comparaison simple des mots de passe (sans bcrypt)
+    if (user.motDePasse !== motDePasse) {
       console.log('Erreur : mot de passe incorrect');
       return res.status(401).json({
         errorType: 'password',
@@ -122,6 +122,7 @@ exports.authentifier = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de l\'authentification de l\'utilisateur' });
   }
 };
+
 
 
 
