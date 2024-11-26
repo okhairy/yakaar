@@ -140,7 +140,7 @@
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="status">
+    <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef>Statut</mat-header-cell>
         <mat-cell *matCellDef="let user">
           <mat-slide-toggle
@@ -150,7 +150,7 @@
             {{user.status ? 'Actif' : 'Inactif'}}
           </mat-slide-toggle>
         </mat-cell>
-      </ng-container>
+      </ng-container> 
     
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
@@ -248,7 +248,7 @@
     
         <div class="flex justify-end gap-4 mt-6">
             <button mat-button type="button" class="text-red-500 hover:bg-red-50" (click)="closeModal()">Annuler</button>
-            <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">
+            <button mat-raised-button color="primary" type="submit" >
               Modifier
             </button>
           </div>

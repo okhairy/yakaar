@@ -46,8 +46,8 @@ export class ApiService {
       catchError(this.handleError));  }
 
   // Mettre à jour un utilisateur existant (admin uniquement)
-  updateUser(userId: string, user: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/user/update/${userId}`, user, { headers: this.getAuthHeaders() })
+  updateUser(userId: string, updateuser: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/user/update/${userId}`, updateuser, { headers: this.getAuthHeaders() })
     .pipe(
       timeout(10000),  // Timeout de 10 secondes
       catchError(this.handleError));  }
