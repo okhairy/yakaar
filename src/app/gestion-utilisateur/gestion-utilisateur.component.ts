@@ -118,7 +118,7 @@ loadUsers() {
   if (this.searchTerm) {
     this.searchUsers();
   } else {
-    this.apiService.getUsers(this.currentPage, this.itemsPerPage).subscribe({
+    this.apiService.getUsers().subscribe({
       next: (response) => {
         this.users = response;
         console.log(this.users)

@@ -251,6 +251,13 @@ router.get('/get-all',  userController.getAllUsers);
  *       404:
  *         description: Utilisateur non trouvé
  */
+
+
+// Ou si vous utilisez une pagination
+//router.get('/get-all', userController.getUsersWithPagination);
+/** */
+
+
 router.get('/get/:id', verifyToken, userController.getUserById);
 
 /**

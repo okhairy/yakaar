@@ -60,7 +60,7 @@ export class ApiService {
       catchError(this.handleError));  }
 
   // Récupérer tous les utilisateurs (admin uniquement)
-  getAllUsers(): Observable<any> {
+ getAllUsers(): Observable<any> {
     return this.http.get(`${this.baseUrl}/user/get-all`, { headers: this.getAuthHeaders() })
     .pipe(
       timeout(10000),  // Timeout de 10 secondes
