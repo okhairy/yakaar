@@ -29,6 +29,8 @@ export class CodeSecretComponent implements AfterViewInit, OnDestroy {
   public showAttempts: boolean = false; // Contrôle de l'affichage des tentatives restantes
   private isBrowser: boolean; // Vérifie si le code s'exécute côté navigateur
   private webSocketSubscription?: Subscription; // Gestion de l'abonnement WebSocket
+  public infoMessage: string = ''; // Message d'information
+
 
   constructor(
     private apiService: ApiService,
@@ -62,26 +64,29 @@ export class CodeSecretComponent implements AfterViewInit, OnDestroy {
 
   public handleKeyPress(key: string): void {
     console.log('Touche reçue :', key);
-  
+
     // Valider que c'est une touche numérique
     if (!/^\d$/.test(key)) {
       console.warn(`Touche non valide ignorée : ${key}`);
       return;
     }
-  
+
     // Ajouter la touche si le code secret est encore incomplet
     if (this.codeSecret.length < 4) {
-      this.codeSecret += key; 
+      this.codeSecret += key;
       console.log('Code Secret mis à jour :', this.codeSecret);
-  
-      // Force la détection des changements
-      this.cdr.detectChanges();
     }
-  
-    // Si le code atteint 4 caractères, soumettre automatiquement
-    if (this.codeSecret.length === 4) {
-      this.submitCode();
+
+    // Mettre à jour le message d'information en fonction de la saisie
+    if (this.codeSecret.length < 4) {
+      this.infoMessage = `Le code secret doit être composé de 4 chiffres. (${this.codeSecret.length}/4)`;
+    } else {
+      this.infoMessage = ''; // Effacer le message une fois le code complet
+      this.submitCode(); // Soumettre le code une fois complet
     }
+
+    // Forcer la détection des changements
+    this.cdr.detectChanges();
   }
   
   
@@ -91,7 +96,11 @@ export class CodeSecretComponent implements AfterViewInit, OnDestroy {
       this.codeSecret = this.codeSecret.substring(0, 4);
     }
 
-    if (this.codeSecret.length === 4) {
+    // Mettre à jour le message d'information en temps réel
+    if (this.codeSecret.length < 4) {
+      this.infoMessage = `Le code secret doit être composé de 4 chiffres. (${this.codeSecret.length}/4)`;
+    } else {
+      this.infoMessage = '';
       this.submitCode();
     }
   }
@@ -105,7 +114,7 @@ export class CodeSecretComponent implements AfterViewInit, OnDestroy {
       next: (response) => {
         const role = response?.user?.role;
         const token = response?.token;
-
+  
         if (token && role) {
           localStorage.setItem('token', token);
           this.router.navigate(
@@ -113,6 +122,7 @@ export class CodeSecretComponent implements AfterViewInit, OnDestroy {
           );
         } else {
           this.errorMessage = 'Problème avec la réponse du serveur.';
+          this.cdr.detectChanges();
         }
       },
       error: () => {
@@ -120,13 +130,17 @@ export class CodeSecretComponent implements AfterViewInit, OnDestroy {
         this.codeSecret = '';
         this.remainingAttempts--;
         this.showAttempts = true;
-
+  
+        // Forcer la détection des changements
+        this.cdr.detectChanges();
+  
         if (this.remainingAttempts <= 0) {
           this.router.navigate(['/login']);
         }
       },
     });
   }
+  
 
   public allowOnlyNumbers(event: KeyboardEvent): void {
     const key = event.key;
