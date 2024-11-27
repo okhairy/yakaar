@@ -346,6 +346,7 @@ router.post('/deconnexion', userController.deconnexion);
  *       403:
  *         description: Un token est requis pour accéder à cette ressource
  */
+
 router.patch('/changer-role/:userId', userController.changerRole); 
 
 /**

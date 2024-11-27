@@ -145,7 +145,7 @@
         </mat-cell>
       </ng-container>
 
-    <ng-container matColumnDef="status">
+   <!-- <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef>Statut</mat-header-cell>
         <mat-cell *matCellDef="let user">
           <mat-slide-toggle
@@ -155,7 +155,7 @@
             {{user.status ? 'Actif' : 'Inactif'}}
           </mat-slide-toggle>
         </mat-cell>
-      </ng-container> 
+      </ng-container> -->
     
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
@@ -267,14 +267,13 @@
           mat-icon-button 
           class="action-button delete-button" 
           color="warn" 
-          (click)="deleteUser(user)" 
-          [disabled]="user._id === currentUserId">
+          (click)="deleteUser(user)" >
           <mat-icon>delete</mat-icon>
         </button>
 
   <!-- Modal de confirmation -->
-  <div *ngIf="showConfirmModal" class="modal">
-    <div class="modal-content">
+  <div *ngIf="showConfirmModal" class="modal-overlay">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <h4>Confirmation de suppression</h4>
       <p>Êtes-vous sûr de vouloir supprimer l'utilisateur {{ userToDelete?.prenom }} {{ userToDelete?.nom }} ?</p>
       <div class="modal-actions">

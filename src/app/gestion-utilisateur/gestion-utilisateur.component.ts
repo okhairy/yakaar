@@ -24,7 +24,7 @@ interface User {
   prenom: string;
   email: string;
   role: 'Admin' | 'User';
-  status?: boolean;
+  //status?: boolean;
   motDePasse:String;
   codeSecret:Number;
   telephone:Number;
@@ -71,7 +71,7 @@ userToDelete: User | null = null;
 
 
 currentUserId = ''; // À définir avec l'ID de l'utilisateur connecté
-displayedColumns = ['prenom', 'nom', 'email', 'role', 'status', 'actions'];
+displayedColumns = ['prenom', 'nom', 'email', 'role', 'actions'];
 userForm: FormGroup;
 
 constructor(
@@ -134,7 +134,7 @@ loadUsers() {
 
 
 onSearch() {
-  if (this.searchTerm.length >= 3 || this.searchTerm.length === 0) {
+  {
     this.loadUsers();
   }
 }
@@ -253,7 +253,7 @@ confirmDelete() {
     });
   }
 
-updateUserStatus(user: User) {
+/*updateUserStatus(user: User) {
   if (user._id && user.status !== undefined) {
     this.apiService.updateUserStatus(user._id, !user.status).subscribe({
       next: (response) => {
@@ -268,7 +268,7 @@ updateUserStatus(user: User) {
       }
     });
   }
-}
+}*/
 
 onPageChange(event: PageEvent) {
       // MatPaginator renvoie un index commençant à 0, donc on ajoute 1

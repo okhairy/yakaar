@@ -307,4 +307,6 @@ exports.changerRole = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Erreur lors de la mise à jour du rôle de l\'utilisateur' });
   }
+
+  
 };
