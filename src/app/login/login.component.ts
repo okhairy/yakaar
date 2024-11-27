@@ -40,7 +40,7 @@ export class LoginComponent {
             if (response.user.role === 'admin') {
               this.router.navigate(['/admin-dashboard']);
             } else if (response.user.role === 'simple') {
-              this.router.navigate(['/user-dashboard']);
+              this.router.navigate(['dashboard-client']);
             }
           } else {
             this.errorMessage = 'Données de rôle manquantes dans la réponse.';
@@ -66,4 +66,6 @@ export class LoginComponent {
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
-}
+} 
+
+

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+/* import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DashboardClientComponent } from './dashboard-client/dashboard-client.component';
 
@@ -14,4 +14,18 @@ import { DashboardClientComponent } from './dashboard-client/dashboard-client.co
 export class AppComponent {
   title = 'yakaar';
   showDashboard = true; // Passez à "true" pour afficher le Dashboard
+}
+ */
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';  // Importation nécessaire pour le routage
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  templateUrl: './app.component.html',  // Template de l'application
+  styleUrls: ['./app.component.css'],   // Fichier CSS
+  imports: [RouterOutlet],              // Assure-toi que RouterOutlet est importé ici
+})
+export class AppComponent {
+  title = 'yakaar';
 }

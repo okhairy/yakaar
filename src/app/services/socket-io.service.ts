@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { ApplicationRef } from '@angular/core';
+import { first } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +13,21 @@ export class SocketIoService {
   private socket: Socket;
   private isSocketReady: boolean = false;
 
-  constructor() {
-    // Initialisation du socket, mais ne se connecte pas encore.
-    this.socket = io('http://localhost:5000', { autoConnect: false }); // Ne pas connecter automatiquement
-  }
+  // constructor() {
+  //   // Initialisation du socket, mais ne se connecte pas encore.
+  //   this.socket = io('http://localhost:5000', { autoConnect: false }); // Ne pas connecter automatiquement
+  // }
+  constructor(private appRef: ApplicationRef) {
+    // Assurez-vous que l'URL de votre serveur WebSocket est correcte
+    this.socket = io('http://localhost:5000/', { autoConnect: false}); // Remplacez par l'URL de votre serveur
 
+    // Attendre que l'application soit stable avant de connecter le WebSocket
+    this.appRef.isStable
+    .pipe(first((isStable) => isStable))
+    .subscribe(() => {
+      this.socket.connect(); // Connexion du socket après la stabilité
+    });
+  }
   // Méthode pour démarrer la connexion WebSocket après un délai
   startSocketConnection(): Observable<boolean> {
     return new Observable<boolean>((observer) => {

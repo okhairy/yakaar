@@ -28,14 +28,7 @@ app.use(
 // Répondre aux pré-requêtes OPTIONS pour CORS
 app.options('*', cors());
 
-// Connexion à MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log('Connecté à MongoDB'))
-  .catch((error) => console.error('Erreur de connexion à MongoDB:', error));
+mongoose.connect('mongodb://localhost/yakarDB');
 
 // Middleware pour analyser les requêtes JSON
 app.use(express.json());
@@ -68,9 +61,9 @@ let code = '';
 let lastKeyTime = Date.now();
 const timeout = 3000; // Timeout de 3 secondes pour réinitialiser le code
 
-// Configuration du port série
+// Configuration du port série pour la lecture des données de capteurs
 const serialPort = new SerialPort({
-  path: '/dev/ttyUSB0', // Remplacez par votre port série
+  path: '/dev/ttyUSB1', // Remplacez par votre port série
   baudRate: 9600, // Correspond à la vitesse configurée sur l'Arduino
 });
 
@@ -79,7 +72,7 @@ const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }));
 
 // Vérifier si le port série est ouvert
 serialPort.on('open', () => {
-  console.log('Port série ouvert : /dev/ttyUSB0');
+  console.log('Port série ouvert : /dev/ttyUSB1');
 });
 
 // Logs pour les erreurs du port série
@@ -90,21 +83,20 @@ serialPort.on('error', (err) => {
 // Écouter les données série
 parser.on('data', (data) => {
   console.log('Données reçues du port série :', data.trim());
-  const key = data.trim();
+  try {
+    // Essayer de parser les données en JSON (temperature et humidity)
+    const sensorData = JSON.parse(data.trim());
 
-  if (/^\d$/.test(key)) {
-    code += key;
-    lastKeyTime = Date.now();
-    console.log(`Touche appuyée : ${key}`);
-  }
-
-  const now = Date.now();
-  if (now - lastKeyTime > timeout && code) {
-    console.log(`Code complet reçu : ${code}`);
-    console.log('Envoi du code :', code);
-io.emit('keypadData', code); // Envoi du code via Socket.IO
-
-    code = ''; // Réinitialiser le code après l'envoi
+    // Si les données contiennent de la température et de l'humidité, on les envoie via WebSocket
+    if (sensorData.temperature !== undefined && sensorData.humidity !== undefined) {
+      io.emit('sensor-data', {
+        temperature: sensorData.temperature,
+        humidity: sensorData.humidity
+      });  // Envoi des données au frontend via WebSocket
+      console.log(`Température: ${sensorData.temperature}°C, Humidité: ${sensorData.humidity}%`);
+    }
+  } catch (error) {
+    console.error('Erreur de parsing des données JSON:', error);
   }
 });
 
@@ -129,3 +121,4 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
 });
+
