@@ -1,5 +1,5 @@
 :host {
-  display: block;
+  display: flex;
   
   .success-snackbar {
     background: #4caf50;
@@ -10,6 +10,11 @@
     background: #f44336;
     color: white;
   }
+  .snackbar-warning {
+    background-color: #ff9800; /* Orange */
+    color: #fff;
+  }
+  
 
   mat-table {
     width: 100%;
@@ -25,6 +30,7 @@
     width: 150px;
   }
 }
+
 
 /* Styles communs aux boutons d'actions */
 .action-button {
@@ -145,6 +151,10 @@ button.mat-raised-button {
 
 
 
+
+
+
+/* Style pour l'overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -158,21 +168,77 @@ button.mat-raised-button {
   z-index: 1000;
 }
 
+/* Style pour le contenu du modal */
 .modal-content {
-  background: white;
+  background-color: #fff;
+  border-radius: 10px;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  max-width: 500px;
-  width: 100%;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-h2 {
-  text-align: center;
+/* Animation d'apparition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Style pour le titre */
+.modal-content h4 {
   font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Style pour le texte */
+.modal-content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Style pour les boutons */
+.modal-actions button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-actions button:first-child {
+  background-color: #f0f0f0;
   color: #333;
 }
 
-.mat-form-field {
-  width: 100%;
+.modal-actions button:first-child:hover {
+  background-color: #ddd;
 }
+
+.modal-actions button:last-child {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.modal-actions button:last-child:hover {
+  background-color: #c0392b;
+}
+
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 colonnes */
+  gap: 16px; /* Ajoute un espacement entre les champs */
+}
+
+

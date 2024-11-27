@@ -96,6 +96,7 @@ constructor(
 }
 
 
+
 openModal(): void {
   this.showAddForm = true;
 }
@@ -164,23 +165,37 @@ cancelEdit(): void {
   this.userForm.reset();
 }
 
-// Méthode pour enregistrer les modifications
 saveChanges(): void {
   if (this.userForm.valid) {
-    const updatedUser = { ...this.userForm.value, id: this.editingUser?._id };
-    this.apiService.updateUser(updatedUser.id, updatedUser).subscribe({  
-          next: (response) => {
-            this.showNotification('Utilisateur modifié avec succés', 'success');
-            this.loadUsers(); // Recharge la liste des utilisateurs
+    // Créez un objet avec les valeurs du formulaire et l'ID de l'utilisateur que vous éditez
+    const updatedUser = { 
+      ...this.userForm.value, 
+      id: this.editingUser?._id // Assurez-vous que l'ID de l'utilisateur est présent ici
+    };
 
-        this.cancelEdit();  // Fermer la modal après la mise à jour
+    // Envoi de la requête PUT à l'API
+    this.apiService.updateUser(updatedUser.id, updatedUser).subscribe({
+      next: (response) => {
+        // Si la mise à jour est réussie
+        this.showNotification('Utilisateur modifié avec succès', 'success');
+        this.loadUsers(); // Recharge la liste des utilisateurs
+        this.cancelEdit(); // Fermer la modal après la mise à jour
       },
       error: (err) => {
-        this.showNotification('Erreur lors de la modification', err);
+        // Vérification et affichage du message d'erreur envoyé par l'API
+        const errorMessage = err.error?.message || 'Erreur lors de la modification';
+        this.showNotification(errorMessage, 'error'); // Affiche l'erreur
+        console.error('Erreur capturée:', err); // Log l'erreur pour débogage
       }
     });
+  } else {
+    // Si le formulaire est invalide
+    this.showNotification('Veuillez remplir correctement le formulaire.', 'warning');
   }
 }
+
+
+
 
 
 
@@ -278,10 +293,16 @@ onPageChange(event: PageEvent) {
   this.loadUsers();
 }
 
-showNotification(message: string, type: 'success' | 'error') {
+showNotification(message: string, type: 'error' | 'success' | 'warning'): void {
+  const snackBarClass =
+    type === 'success' ? 'snackbar-success' :
+    type === 'error' ? 'snackbar-error' :
+    'snackbar-warning'; // Classe pour les avertissements
+
   this.snackBar.open(message, 'Fermer', {
     duration: 3000,
-    panelClass: type === 'success' ? ['success-snackbar'] : ['error-snackbar']
+    panelClass: [snackBarClass],
   });
 }
+
 }

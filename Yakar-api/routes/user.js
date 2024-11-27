@@ -346,7 +346,6 @@ router.post('/deconnexion', userController.deconnexion);
  *       403:
  *         description: Un token est requis pour accéder à cette ressource
  */
-
 router.patch('/changer-role/:userId', userController.changerRole); 
 
 /**
@@ -382,6 +381,23 @@ router.patch('/changer-role/:userId', userController.changerRole);
  */
 router.delete('/delete-multiple', verifyToken, verifyRole('admin'), userController.deleteMultipleUsers); 
 
-
+// Route pour la recherche d'utilisateurs
+router.get('/search', async (req, res) => {
+    const searchTerm = req.query.q || '';
+    try {
+      const users = await User.find({
+        $or: [
+          { nom: { $regex: searchTerm, $options: 'i' } },
+          { prenom: { $regex: searchTerm, $options: 'i' } },
+          { email: { $regex: searchTerm, $options: 'i' } }
+        ]
+      });
+  
+      res.json({ users: users, total: users.length });
+    } catch (error) {
+      res.status(500).json({ message: 'Erreur serveur', error });
+    }
+  });
+  
 
 module.exports = router;

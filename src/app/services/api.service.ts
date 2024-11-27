@@ -37,13 +37,37 @@ export class ApiService {
         catchError(this.handleError));
   }
 
+
   // Créer un nouvel utilisateur (admin uniquement)
   createUser(user: any): Observable<any> {
-    
     return this.http.post(`${this.baseUrl}/user/inscrire`, user, { headers: this.getAuthHeaders() })
-    .pipe(
-      timeout(10000),  // Timeout de 10 secondes
-      catchError(this.handleError));  }
+      .pipe(
+        timeout(10000),  // Timeout de 10 secondes
+        catchError(error => {
+          let errorMessage = 'Une erreur est survenue.';
+
+          if (error.status === 400) {
+            // Si l'erreur est de type 400, cela peut signifier une erreur liée aux validations
+            if (error.error && error.error.error) {
+              errorMessage = error.error.error;  // Utiliser le message d'erreur spécifique envoyé par le backend
+            
+             // Message d'erreur spécifique pour l'email, le téléphone ou le code secret
+             if (error.error.error === 'L\'email est déjà utilisé') {
+              errorMessage = 'Cet email est déjà utilisé. Veuillez en choisir un autre.';
+            } else if (error.error.error === 'Le téléphone est déjà utilisé') {
+              errorMessage = 'Ce numéro de téléphone est déjà utilisé. Veuillez en choisir un autre.';
+            } else if (error.error.error === 'Le code secret est déjà utilisé') {
+              errorMessage = 'Ce code secret est déjà utilisé. Veuillez en choisir un autre.';
+            }
+          }
+          } else if (error.status === 500) {
+            errorMessage = 'Problème serveur. Veuillez réessayer plus tard.';
+          }
+
+          return throwError(() => new Error(errorMessage));
+        })
+      );
+  }
 
   // Mettre à jour un utilisateur existant (admin uniquement)
   updateUser(userId: string, updateuser: any): Observable<any> {
@@ -51,6 +75,11 @@ export class ApiService {
     .pipe(
       timeout(10000),  // Timeout de 10 secondes
       catchError(this.handleError));  }
+
+
+
+
+      
 
   // Supprimer un utilisateur par ID (admin uniquement)
   deleteUser(userId: string): Observable<any> {
@@ -162,14 +191,18 @@ export class ApiService {
   }
 
   // Gestion des erreurs API
-  private handleError(error: any): Observable<never> {
-    console.error('Une erreur est survenue :', error);
+ // Dans ton service API
+private handleError(error: any): Observable<never> {
+  console.error('Une erreur est survenue :', error);
 
-    let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
-    if (error.error && error.error.message) {
-      errorMessage = error.error.message;
-    }
-
-    return throwError(() => errorMessage);
+  let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+  // Vérifie si une erreur détaillée est fournie par le backend
+  if (error.error && error.error.message) {
+    errorMessage = error.error.message;
   }
+
+  // Retourne l'erreur pour la capturer dans le composant
+  return throwError(() => new Error(errorMessage));
+}
+
 }

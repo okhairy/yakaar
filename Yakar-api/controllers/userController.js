@@ -45,11 +45,82 @@ const validateUserInput = (nom, prenom, email, motDePasse, codeSecret, telephone
   return errors;
 };
 
+
+// Vérifier l'unicité de l'email
+const checkEmailUnique = async (req, res) => {
+  const { email } = req.query;
+
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      return res.json({ result: false }); // L'email n'est pas unique
+    }
+    return res.json({ result: true }); // L'email est unique
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Une erreur est survenue.' });
+  }
+};
+
+// Vérifier l'unicité du code secret
+const checkCodeSecretUnique = async (req, res) => {
+  const { codeSecret } = req.query;
+
+  try {
+    const user = await User.findOne({ codeSecret: codeSecret });
+    if (user) {
+      return res.json({ result: false }); // Le code secret n'est pas unique
+    }
+    return res.json({ result: true }); // Le code secret est unique
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Une erreur est survenue.' });
+  }
+};
+
+// Vérifier l'unicité du téléphone
+const checkTelephoneUnique = async (req, res) => {
+  const { telephone } = req.query;
+
+  try {
+    const user = await User.findOne({ telephone: telephone });
+    if (user) {
+      return res.json({ result: false }); // Le téléphone n'est pas unique
+    }
+    return res.json({ result: true }); // Le téléphone est unique
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Une erreur est survenue.' });
+  }
+};
+
 exports.inscrireUser = async (req, res) => {
   try {
     const { nom, prenom, email, motDePasse, codeSecret, role, telephone, sexe } = req.body;
 
-    console.log('Début de l\'inscription'); // Log de début
+    // Validation des champs
+    const validationErrors = validateUserInput(nom, prenom, email, motDePasse, codeSecret, telephone, sexe);
+    if (validationErrors.length > 0) {
+      return res.status(400).json({ errors: validationErrors });
+    }
+
+    // Vérification de l'email
+    const emailExists = await User.findOne({ email });
+    if (emailExists) {
+      return res.status(400).json({ error: 'L\'email existe déjà.' });
+    }
+
+    // Vérification du code secret
+    const codeExists = await User.findOne({ codeSecret });
+    if (codeExists) {
+      return res.status(400).json({ error: 'Le code secret existe déjà.' });
+    }
+
+    // Vérification du téléphone
+    const phoneExists = await User.findOne({ telephone });
+    if (phoneExists) {
+      return res.status(400).json({ error: 'Le numéro de téléphone existe déjà.' });
+    }
 
     // Créer un nouvel utilisateur avec les informations reçues
     const newUser = new User({
@@ -59,19 +130,19 @@ exports.inscrireUser = async (req, res) => {
       motDePasse,
       codeSecret,
       role,
-      
-      telephone,  
-      sexe  
+      telephone,
+      sexe
     });
 
     await newUser.save();
- 
+
     res.status(201).json({ message: 'Utilisateur inscrit avec succès', user: newUser });
   } catch (error) {
     console.error('Erreur dans inscrireUser:', error); // Log de l'erreur
     res.status(400).json({ error: 'Erreur lors de l\'inscription de l\'utilisateur' });
   }
 };
+
 
 
 exports.authentifier = async (req, res) => {
@@ -147,28 +218,58 @@ exports.authentifierParCodeSecret = async (req, res) => {
   }
 };
 
-// methode pour mettre à jour un utilisateur
+
+
+
+
+//methode pour modifier un utilisateur en verifiant l'unicité du mail,telephone,code secret
 exports.updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
     const { nom, prenom, email, motDePasse, codeSecret, role, photo, telephone, sexe } = req.body;
-
+ 
     // Validation des champs de saisie
     const validationErrors = validateUserInput(nom, prenom, email, motDePasse, codeSecret, telephone, sexe);
     if (validationErrors.length > 0) {
       return res.status(400).json({ errors: validationErrors });
     }
-
-    // Trouver et mettre à jour l'utilisateur avec les nouvelles informations
+ 
+    // Trouver l'utilisateur actuel
+    const currentUser = await User.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+ 
+    // Vérifier l'unicité de l'email (en tenant compte de l'utilisateur actuel)
+    const emailExists = await User.findOne({ 
+      email: email 
+    });
+    if (emailExists && emailExists._id.toString() !== userId) {
+      return res.status(400).json({ error: 'Cet email est déjà utilisé par un autre utilisateur' });
+    }
+ 
+    // Vérifier l'unicité du téléphone
+    const telephoneExists = await User.findOne({ 
+      telephone: telephone 
+    });
+    if (telephoneExists && telephoneExists._id.toString() !== userId) {
+      return res.status(400).json({ error: 'Ce numéro de téléphone est déjà utilisé par un autre utilisateur' });
+    }
+ 
+    // Vérifier l'unicité du code secret
+    const codeSecretExists = await User.findOne({ 
+      codeSecret: codeSecret 
+    });
+    if (codeSecretExists && codeSecretExists._id.toString() !== userId) {
+      return res.status(400).json({ error: 'Ce code secret est déjà utilisé par un autre utilisateur' });
+    }
+ 
+    // Mettre à jour l'utilisateur
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { nom, prenom, email, motDePasse, codeSecret, role, photo, telephone, sexe, dateModification: Date.now() },
       { new: true, runValidators: true }
     );
-
-    if (!updatedUser) {
-      return res.status(404).json({ error: 'Utilisateur non trouvé' });
-    }
       
     res.status(200).json({
       message: 'Utilisateur mis à jour avec succès',
@@ -177,7 +278,13 @@ exports.updateUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Erreur lors de la mise à jour de l\'utilisateur' });
   }
-};
+ };
+
+
+
+
+
+
 
 exports.supprimerUser = async (req, res) => {
   try {
@@ -308,5 +415,10 @@ exports.changerRole = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la mise à jour du rôle de l\'utilisateur' });
   }
 
+  module.exports = {
+    checkEmailUnique,
+    checkCodeSecretUnique,
+    checkTelephoneUnique,
+  };
   
 };
