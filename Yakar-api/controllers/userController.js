@@ -230,29 +230,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-//Méthode pour récupérer tous les utilisateurs avec pagination
-exports.getUsersWithPagination = async (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 8;
-    const skip = (page - 1) * limit;
 
-    const totalUsers = await User.countDocuments();
-    const users = await User.find()
-      .skip(skip)
-      .limit(limit)
-      .select('-motDePasse'); // Exclure le mot de passe
-
-    res.status(200).json({
-      users,
-      total: totalUsers,
-      page,
-      totalPages: Math.ceil(totalUsers / limit)
-    });
-  } catch (error) {
-    res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' });
-  }
-};
 
 
 // Méthode pour récupérer un utilisateur par ID

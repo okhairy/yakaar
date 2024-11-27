@@ -90,7 +90,7 @@ constructor(
       [Validators.required, Validators.pattern(/^(70|75|76|77|78)\d{7}$/)]
     ], // Préfixe valide suivi de 7 chiffres
     sexe: ['', [Validators.required]],
-    role: ['', [Validators.required]]
+    role: ['simple', Validators.required]  // 'simple' est la valeur par défaut
   });
   
 }
@@ -131,6 +131,8 @@ loadUsers() {
   }
 }
 
+
+
 onSearch() {
   if (this.searchTerm.length >= 3 || this.searchTerm.length === 0) {
     this.loadUsers();
@@ -168,11 +170,13 @@ saveChanges(): void {
     const updatedUser = { ...this.userForm.value, id: this.editingUser?._id };
     this.apiService.updateUser(updatedUser.id, updatedUser).subscribe({  
           next: (response) => {
-        console.log('Utilisateur modifié', response);
+            this.showNotification('Utilisateur modifié avec succés', 'success');
+            this.loadUsers(); // Recharge la liste des utilisateurs
+
         this.cancelEdit();  // Fermer la modal après la mise à jour
       },
       error: (err) => {
-        console.error('Erreur lors de la modification', err);
+        this.showNotification('Erreur lors de la modification', err);
       }
     });
   }

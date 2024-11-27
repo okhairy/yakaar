@@ -157,6 +157,8 @@ router.post('/inscrire', userController.inscrireUser);
  *       404:
  *         description: Utilisateur non trouvé
  */
+
+
 router.put('/update/:id', userController.updateUser);
 
 /**
