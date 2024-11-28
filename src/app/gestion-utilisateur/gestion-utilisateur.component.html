@@ -11,7 +11,7 @@
           <input 
             matInput 
             [formControl]="searchControl"
-            placeholder="Rechercher par nom, prénom, email..."
+            placeholder="Rechercher par nom, prénom, role"
           >
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
@@ -53,13 +53,29 @@
         </mat-form-field>
 
         <!-- Mot de passe -->
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Mot de passe</mat-label>
-          <input matInput formControlName="motDePasse" type="password" placeholder="Entrez le mot de passe" />
-          <mat-error *ngIf="userForm.get('motDePasse')?.hasError('required')">Le mot de passe est requis.</mat-error>
-          <mat-error *ngIf="userForm.get('motDePasse')?.hasError('minlength')">Minimum 8 caractères.</mat-error>
-        </mat-form-field>
+<mat-form-field appearance="fill" class="w-full">
+  <mat-label>Mot de passe</mat-label>
+  <input 
+    matInput 
+    [type]="showPassword ? 'text' : 'password'" 
+    formControlName="motDePasse" 
+    placeholder="Entrez le mot de passe" 
+  />
+  <button 
+    mat-icon-button 
+    matSuffix 
+    (click)="togglePasswordVisibility()"
+    type="button"
+  >
+    <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+  </button>
+  <mat-hint>
+    Au moins 8 caractères, avec majuscules, minuscules, chiffres et caractères spéciaux
+  </mat-hint>
 
+</mat-form-field>
+
+<!-- Faites de même pour le formulaire de modification -->
         <!-- Code secret -->
         <mat-form-field appearance="fill" class="w-full">
           <mat-label>Code secret</mat-label>
@@ -87,7 +103,6 @@
           <mat-select formControlName="sexe">
             <mat-option value="Homme">Homme</mat-option>
             <mat-option value="Femme">Femme</mat-option>
-            <mat-option value="Autre">Autre</mat-option>
           </mat-select>
           <mat-error *ngIf="userForm.get('sexe')?.hasError('required')">Le sexe est requis.</mat-error>
         </mat-form-field>
@@ -206,16 +221,29 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Mot de passe</mat-label>
-          <input matInput formControlName="motDePasse" type="password" />
-          <mat-error *ngIf="userForm.get('motDePasse')?.hasError('required')">
-            Le mot de passe est requis.
-          </mat-error>
-          <mat-error *ngIf="userForm.get('motDePasse')?.hasError('minlength')">
-            Le mot de passe doit avoir au moins 8 caractères.
-          </mat-error>
-        </mat-form-field>
+         <!-- Mot de passe -->
+<mat-form-field appearance="fill" class="w-full">
+  <mat-label>Mot de passe</mat-label>
+  <input 
+    matInput 
+    [type]="showPassword ? 'text' : 'password'" 
+    formControlName="motDePasse" 
+    placeholder="Entrez le mot de passe" 
+  />
+  <button 
+    mat-icon-button 
+    matSuffix 
+    (click)="togglePasswordVisibility()"
+    type="button"
+  >
+    <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+  </button>
+  <mat-hint>
+    Au moins 8 caractères, avec majuscules, minuscules, chiffres et caractères spéciaux
+  </mat-hint>
+
+</mat-form-field>
+
 
         <mat-form-field>
           <mat-label>Code secret</mat-label>
@@ -261,10 +289,6 @@
 </div>
 
           
-           <!-- <button mat-icon-button color="warn" (click)="deleteUser(user)" [disabled]="user._id === currentUserId">
-            <mat-icon>delete</mat-icon>
-          </button> -->
-          
        
 
         <!-- Bouton de suppression -->
@@ -295,14 +319,15 @@
     </mat-table>
 
     <!-- Message si aucun utilisateur n'est trouvé -->
-    <div *ngIf="filteredUsers.length === 0">
-      <p>Aucun utilisateur trouvé</p>
+    <div 
+    *ngIf="filteredUsers.length === 0">
+    
 </div>
 
- <!--   <mat-paginator
+  <mat-paginator
       [length]="totalUsers"
       [pageSize]="itemsPerPage"
       [pageSizeOptions]="[8, 16, 24]"
       (page)="onPageChange($event)">
     </mat-paginator>
-  </div>   -->
+  </div>   
