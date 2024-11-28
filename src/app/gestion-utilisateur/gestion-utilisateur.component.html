@@ -8,7 +8,11 @@
       <div class="flex gap-4">
         <mat-form-field>
           <mat-label>Rechercher</mat-label>
-<input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()">
+          <input 
+            matInput 
+            [formControl]="searchControl"
+            placeholder="Rechercher par nom, prénom, email..."
+          >
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
        <div>
@@ -114,7 +118,7 @@
   
 
     <!-- Table des utilisateurs -->
-    <mat-table [dataSource]="users" class="mat-elevation-z8">
+    <mat-table [dataSource]="filteredUsers" class="mat-elevation-z8">
       <!-- Colonnes de la table -->
       <ng-container matColumnDef="prenom">
         <mat-header-cell *matHeaderCellDef>Prénom</mat-header-cell>
@@ -139,7 +143,8 @@
           <mat-slide-toggle
             [checked]="user.role === 'Admin'"
             (change)="toggleUserRole(user)"
-            [disabled]="user._id === currentUserId">
+            [disabled]="user._id === currentUserId"
+            [ngClass]="user.role === 'Admin' ? 'primary' : 'accent'">
             {{user.role}}
           </mat-slide-toggle>
         </mat-cell>
@@ -290,8 +295,8 @@
     </mat-table>
 
     <!-- Message si aucun utilisateur n'est trouvé -->
-<div *ngIf="users.length === 0">
-  <p>Aucun utilisateur trouvé</p>
+    <div *ngIf="filteredUsers.length === 0">
+      <p>Aucun utilisateur trouvé</p>
 </div>
 
  <!--   <mat-paginator

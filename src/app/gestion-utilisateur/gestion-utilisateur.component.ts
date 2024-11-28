@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormsModule,FormControl, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,6 +13,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { ApiService } from '../services/api.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { PageEvent } from '@angular/material/paginator';
+
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 
 
@@ -38,6 +41,7 @@ interface User {
   imports: [
     CommonModule,
     FormsModule,
+    
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
@@ -62,8 +66,12 @@ export class GestionUtilisateurComponent {
 users: User[] = [];
 currentPage = 1;
 itemsPerPage = 8;
-searchTerm = '';
-totalUsers = 0;
+totalUsers = 0;  
+filteredUsers: User[] = []; // Liste filtrée à afficher dans la table
+// Nouveau contrôle de recherche réactif
+searchControl = new FormControl('');
+  
+
 showAddForm = false;
 editingUser: User | null = null;
 showConfirmModal = false;
@@ -73,6 +81,7 @@ userToDelete: User | null = null;
 currentUserId = ''; // À définir avec l'ID de l'utilisateur connecté
 displayedColumns = ['prenom', 'nom', 'email', 'role', 'actions'];
 userForm: FormGroup;
+  searchTerm: any;
 
 constructor(
   private fb: FormBuilder,
@@ -92,7 +101,11 @@ constructor(
     sexe: ['', [Validators.required]],
     role: ['simple', Validators.required]  // 'simple' est la valeur par défaut
   });
-  
+
+
+    // Initialiser la liste filtrée avec tous les utilisateurs
+    this.filteredUsers = [...this.users];
+
 }
 
 
@@ -112,45 +125,79 @@ closeModal(): void {
 
 
 ngOnInit() {
+  
   this.loadUsers();
+
+
+
+
+   // Configuration de la recherche réactive
+   this.searchControl.valueChanges.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+  ).subscribe(searchTerm => {
+    this.performSearch('searchTerm');
+  });
 }
 
-loadUsers() {
-  if (this.searchTerm) {
-    this.searchUsers();
-  } else {
-    this.apiService.getUsers().subscribe({
-      next: (response) => {
-        this.users = response;
-        console.log(this.users)
-        this.totalUsers = response.total;
-      },
-      error: () => {
-        this.showNotification('Erreur lors du chargement des utilisateurs', 'error');
-      }
-    });
+// Nouvelle méthode de recherche optimisée
+performSearch(searchTerm: string): void {
+  const term = (searchTerm || '').toLowerCase().trim();
+
+  if (!term) {
+    this.filteredUsers = [...this.users];
+    this.totalUsers = this.users.length;
+    return;
   }
+
+  this.filteredUsers = this.users.filter(user => 
+    user.nom.toLowerCase().includes(term) ||
+    user.prenom.toLowerCase().includes(term) ||
+    user.email.toLowerCase().includes(term) ||
+    user.role.toLowerCase().includes(term)
+  );
+
+  this.totalUsers = this.filteredUsers.length;
 }
 
 
 
-onSearch() {
-  {
-    this.loadUsers();
-  }
-}
 
-searchUsers() {
-  this.apiService.searchUsers(this.searchTerm).subscribe({
+loadUsers(): void {
+  this.apiService.getUsers().subscribe({
     next: (response) => {
-      this.users = response.users;
-      this.totalUsers = response.total;
+      this.users = response; // Charge la liste complète des utilisateurs
+      this.filteredUsers = [...this.users]; // Met à jour la liste filtrée
+      this.totalUsers = this.users.length; // Total des utilisateurs
     },
     error: () => {
-      this.showNotification('Erreur lors de la recherche', 'error');
+      this.showNotification('Erreur lors du chargement des utilisateurs', 'error');
     }
   });
 }
+
+
+
+
+ // Fonction appelée à chaque saisie
+ onSearch(): void {
+  const term = this.searchTerm.toLowerCase().trim();
+
+  // Si le terme est vide, réafficher tous les utilisateurs
+  if (!term) {
+    this.filteredUsers = [...this.users];
+    return;
+  }
+
+  // Filtrage avancé avec plusieurs critères
+  this.filteredUsers = this.users.filter(user => 
+    user.nom.toLowerCase().includes(term) ||
+    user.prenom.toLowerCase().includes(term) ||
+    user.email.toLowerCase().includes(term) ||
+    user.role.toLowerCase().includes(term)
+  );
+}
+
 
 
  // Méthode pour ouvrir la modal avec l'utilisateur à éditer
@@ -193,9 +240,6 @@ saveChanges(): void {
     this.showNotification('Veuillez remplir correctement le formulaire.', 'warning');
   }
 }
-
-
-
 
 
 

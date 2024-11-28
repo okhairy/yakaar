@@ -25,11 +25,26 @@
     text-align: right;
   }
 
-  .mat-column-role,
-  .mat-column-status {
+  .mat-column-role
+  {
     width: 150px;
   }
 }
+
+
+
+.search-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  margin-top: 20px;
+}
+
 
 
 /* Styles communs aux boutons d'actions */

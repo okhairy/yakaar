@@ -135,16 +135,16 @@ export class ApiService {
       catchError(this.handleError));
   }
 
-  // Rechercher des utilisateurs
-  searchUsers(query: string): Observable<any> {
-    const params = new HttpParams().set('q', query);
-    return this.http.get(`${this.baseUrl}/user/search`, {
-      params,
-      headers: this.getAuthHeaders()
-    }) .pipe(
-      timeout(10000),  // Timeout de 10 secondes
-      catchError(this.handleError));
-  }
+  // Rechercher des utilisateurs par terme de recherche
+searchUsers(searchTerm: string): Observable<any> {
+  const params = new HttpParams().set('query', searchTerm); // Ou utilisez un paramètre adapté à votre API.
+
+  return this.http.get(`${this.baseUrl}/user/search?query=${searchTerm}`, { headers: this.getAuthHeaders() })
+    .pipe(
+      timeout(10000), // Timeout de 10 secondes
+      catchError(this.handleError) // Gérer les erreurs
+    );
+}
 
   // -------- COLLECTES --------
 

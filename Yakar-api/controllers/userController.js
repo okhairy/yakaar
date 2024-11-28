@@ -219,9 +219,6 @@ exports.authentifierParCodeSecret = async (req, res) => {
 };
 
 
-
-
-
 //methode pour modifier un utilisateur en verifiant l'unicité du mail,telephone,code secret
 exports.updateUser = async (req, res) => {
   try {
@@ -338,7 +335,33 @@ exports.getAllUsers = async (req, res) => {
 };
 
 
+// Méthode pour rechercher des utilisateurs
+exports.searchUsers = async (req, res) => {
+  const { query } = req.query;  // Récupération du terme de recherche
 
+  if (!query) {
+    return res.status(400).json({ error: 'Le terme de recherche est requis' });
+  }
+
+  try {
+    // Recherche des utilisateurs par nom, prénom ou email
+    const users = await User.find({
+      $or: [
+        { nom: { $regex: query, $options: 'i' } },  // Recherche insensible à la casse
+        { prenom: { $regex: query, $options: 'i' } },
+        { email: { $regex: query, $options: 'i' } },
+      ]
+    });
+
+    // Retourner les utilisateurs trouvés et le total
+    res.status(200).json({
+      users,
+      total: users.length,  // Nombre total d'utilisateurs trouvés
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la recherche des utilisateurs' });
+  }
+};
 
 // Méthode pour récupérer un utilisateur par ID
 exports.getUserById = async (req, res) => {
