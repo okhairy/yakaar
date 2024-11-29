@@ -69,14 +69,35 @@ export class ApiService {
       );
   }
 
-  // Mettre à jour un utilisateur existant (admin uniquement)
-  updateUser(userId: string, updateuser: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/user/update/${userId}`, updateuser, { headers: this.getAuthHeaders() })
-    .pipe(
-      timeout(10000),  // Timeout de 10 secondes
-      catchError(this.handleError));  }
+// Mettre à jour un utilisateur existant (admin uniquement)
+updateUser(userId: string, updateuser: any): Observable<any> {
+  return this.http.put(`${this.baseUrl}/user/update/${userId}`, updateuser, { headers: this.getAuthHeaders() })
+  .pipe(
+    timeout(10000),  // Timeout de 10 secondes
+    catchError(error => {
+      let errorMessage = 'Une erreur est survenue lors de la modification.';
 
+      if (error.status === 400) {
+        if (error.error && error.error.error) {
+          errorMessage = error.error.error;  
+         
+          // Messages d'erreur spécifiques
+          if (error.error.error === 'L\'email est déjà utilisé') {
+            errorMessage = 'Cet email est déjà utilisé. Veuillez en choisir un autre.';
+          } else if (error.error.error === 'Le téléphone est déjà utilisé') {
+            errorMessage = 'Ce numéro de téléphone est déjà utilisé. Veuillez en choisir un autre.';
+          } else if (error.error.error === 'Le code secret est déjà utilisé') {
+            errorMessage = 'Ce code secret est déjà utilisé. Veuillez en choisir un autre.';
+          }
+        }
+      } else if (error.status === 500) {
+        errorMessage = 'Problème serveur. Veuillez réessayer plus tard.';
+      }
 
+      return throwError(() => new Error(errorMessage));
+    })
+  );
+}
 
 
       

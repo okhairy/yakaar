@@ -198,9 +198,8 @@ togglePasswordVisibility() {
           this.cancelEdit();
         },
         error: (err) => {
-          const errorMessage = err.error?.message || 'Cet identifiant est déjà utilisé';
-          this.showNotification(errorMessage, 'error');
-          console.error('Erreur capturée:', err);
+          // Afficher le message d'erreur personnalisé
+          this.showNotification(err.message, 'error');
         }
       });
     } else {
@@ -218,8 +217,8 @@ togglePasswordVisibility() {
           this.loadUsers();
           this.closeModal();
         },
-        error: () => {
-          this.showNotification('Cet identifiant est déjà utilisé', 'error');
+        error: (err) => {
+          this.showNotification(err.message, 'error');
         }
       });
     } else {
