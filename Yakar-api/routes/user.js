@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const { verifyToken, verifyRole } = require('../middlewares/authMiddleware');
+ 
 
 /**
  * @swagger
@@ -19,7 +20,7 @@ const { verifyToken, verifyRole } = require('../middlewares/authMiddleware');
  *               email:
  *                 type: string
  *                 description: Adresse email de l'utilisateur
- *                 example: "utilisateur@ example.com"
+ *                 example: "utilisateur@example.com"
  *               motDePasse:
  *                 type: string
  *                 description: Mot de passe de l'utilisateur

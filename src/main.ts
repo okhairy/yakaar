@@ -11,7 +11,7 @@ import { routes } from '/home/oumoul-khairy/Documents/yakaar (2)/src/app/app.rou
 import { LoginComponent } from '/home/oumoul-khairy/Documents/yakaar (2)/src/app/login/login.component';  // Vérifie que ce fichier existe à ce chemin
 //import { AdminDashboardComponent } from '/home/oumoul-khairy/Documents/yakaar (2)/src/app/dashboard-client/dashboard-client.component';  // Vérifie
 import { DashboardComponent } from '/home/oumoul-khairy/Documents/yakaar (2)/src/app/components/dashboard/dashboard.component';  
-import { CodeSecretComponent } from '/home/oumoul-khairy/Documents/yakaar (2)/src/app/auth/code-secret/code-secret.component';  // Vérifie
+import { CodeSecretComponent } from '/home/oumoul-khairy/Documents/yakaar (2)/src/app/code-secret/code-secret.component';  // Vérifie
 
 
 // Démarrage de l'application avec les routes

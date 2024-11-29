@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -103,18 +103,18 @@ export class ApiService {
   }
 
   // Gestion des erreurs API
-  private handleError(error: any): Observable<never> {
-    // Afficher l'erreur dans la console pour le débogage
-    console.error('Une erreur est survenue :', error);
-
-    // Vous pouvez personnaliser le message d'erreur ici selon le type d'erreur
+  private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
-    if (error.error && error.error.message) {
-      errorMessage = error.error.message;
+    
+    // Vérifier si la réponse contient un message d'erreur spécifique
+    if (error.error && error.error.error) {
+      errorMessage = error.error.error;  // Utiliser le message d'erreur spécifique de l'API
+    } else if (error.error && error.error.message) {
+      errorMessage = error.error.message;  // Utiliser un autre format possible de l'API
     }
 
-    // Retourner une erreur observable avec un message personnalisé
-    return throwError(errorMessage);
+    // Retourner un Observable avec le message d'erreur
+    return throwError(() => new Error(errorMessage));
   }
 }
  

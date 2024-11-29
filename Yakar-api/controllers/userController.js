@@ -2,6 +2,8 @@ const User = require('../models/User');
 const Collecte = require('../models/Collecte');
 const jwt = require('jsonwebtoken');
 const BlacklistToken = require('../models/blacklistToken');
+const crypto = require('crypto');
+
 
 
 // Fonction de validation des champs de l'utilisateur
@@ -82,13 +84,20 @@ exports.authentifier = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      // L'email n'existe pas dans la base de données
-      return res.status(401).json({ error: 'Email non trouvé. Veuillez vérifier votre email.' });
+      console.log('Erreur : email non trouvé');
+      return res.status(401).json({
+        errorType: 'email',
+        error: 'Email non trouvé. Veuillez vérifier votre email.'
+      });
     }
 
+    // Comparaison simple des mots de passe (sans bcrypt)
     if (user.motDePasse !== motDePasse) {
-      // L'email est correct mais le mot de passe est incorrect
-      return res.status(401).json({ error: 'Mot de passe incorrect. Veuillez réessayer.' });
+      console.log('Erreur : mot de passe incorrect');
+      return res.status(401).json({
+        errorType: 'password',
+        error: 'Mot de passe incorrect. Veuillez réessayer.'
+      });
     }
 
     // Créer le token JWT
@@ -100,7 +109,7 @@ exports.authentifier = async (req, res) => {
 
     res.status(200).json({
       message: 'Authentification réussie',
-      token, // Renvoie le token au client
+      token,
       user: {
         nom: user.nom,
         prenom: user.prenom,
@@ -109,9 +118,12 @@ exports.authentifier = async (req, res) => {
       }
     });
   } catch (error) {
+    console.log('Erreur interne :', error);
     res.status(500).json({ error: 'Erreur lors de l\'authentification de l\'utilisateur' });
   }
 };
+
+
 
 
 // Authentification avec le code secret
